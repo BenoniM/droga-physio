@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+
+@font-face {
+  font-family: 'Compacta';
+  src: url('/fonts/compacta.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-extralight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-extrabold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Delight';
+  src: url('/fonts/delight-black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Variable font (optional — covers all weights in one file) */
+@font-face {
+  font-family: 'DelightVF';
+  src: url('/fonts/delight-vf.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-compacta: "Compacta", sans-serif;
+  --font-delight: "Delight", sans-serif;
+}
+
+:root {
+  font-family: "Delight", sans-serif;
+}
+
+body {
+  font-family: "Delight", sans-serif;
+}
+@keyframes swooshReveal {
+  0% {
+    -webkit-clip-path: circle(0% at 0% 0%);
+    clip-path: circle(0% at 0% 0%);
+  }
+
+  100% {
+    -webkit-clip-path: circle(150% at 0% 0%);
+    clip-path: circle(150% at 0% 0%);
+  }
+}
+
+.animate-swoosh {
+  -webkit-animation: swooshReveal 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: swooshReveal 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+  from { transform: translateX(-32px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(32px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-in {
+  animation-duration: 700ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.slide-in-from-left-8 {
+  animation-name: slideInFromLeft;
+}
+
+.slide-in-from-right-8 {
+  animation-name: slideInFromRight;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.scale-in {
+  animation-name: scaleIn;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(60px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lineGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.animate-slide-down { animation: slideDown 0.9s cubic-bezier(0.22,1,0.36,1) forwards; }
+.animate-fade-up    { animation: fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) forwards; }
+.animate-line-grow  { animation: lineGrow 1.2s cubic-bezier(0.22,1,0.36,1) forwards; }
