@@ -12,7 +12,7 @@ import News from './Pages/News.jsx'
 import Blog from './Pages/Blog.jsx'
 import Contact from './Pages/Contact.jsx'
 import Appointment from './Pages/Appointment.jsx'
-import ScrollToTop from './components/ScrolltoTop.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
