@@ -484,7 +484,7 @@ function Home() {
 
             {/* Extra text positioned above PHYSIOTHERAPY on the right */}
             <span
-              className="font-semibold text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white uppercase drop-shadow-md absolute right-0 bottom-[55%] z-10 translate-y-[20%] translate-x-[100%]"
+              className="font-semibold text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white uppercase drop-shadow-md absolute right-0 bottom-[55%] z-10 translate-y-[20%] translate-x-[80%]"
               style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
             >
               PAIN FREE MOBILITY!
