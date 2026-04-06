@@ -70,15 +70,13 @@ function Home() {
     setBgStyles({
       droga: {
         backgroundSize: `${bgW / scaleX}px ${bgH}px`,
-        backgroundPosition: `${(coverOffX - drogaRect.left) / scaleX}px ${
-          coverOffY - drogaRect.top
-        }px`,
+        backgroundPosition: `${(coverOffX - drogaRect.left) / scaleX}px ${coverOffY - drogaRect.top
+          }px`,
       },
       physio: {
         backgroundSize: `${bgW / scaleX}px ${bgH}px`,
-        backgroundPosition: `${(coverOffX - physioRect.left - 7) / scaleX}px ${
-          coverOffY - physioRect.top
-        }px`,
+        backgroundPosition: `${(coverOffX - physioRect.left - 7) / scaleX}px ${coverOffY - physioRect.top
+          }px`,
       },
     });
   }, []);
@@ -274,8 +272,8 @@ function Home() {
       });
 
       // Background Card Reveal
-      tl.fromTo(".mv-card", 
-        { opacity: 0, y: 100, scale: 0.95 }, 
+      tl.fromTo(".mv-card",
+        { opacity: 0, y: 100, scale: 0.95 },
         { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power4.out" }
       );
 
@@ -427,7 +425,7 @@ function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-        nextSlide();
+      nextSlide();
     }, 4500);
 
     return () => clearInterval(interval);
@@ -436,26 +434,26 @@ function Home() {
   // GSAP Sliding Animation
   useEffect(() => {
     if (sliderTrackRef.current) {
-        isTransitioning.current = true;
-        const cardWidth = sliderTrackRef.current.children[0].offsetWidth + 40; // width + gap
-        
-        gsap.to(sliderTrackRef.current, {
-            x: -currentIndex * cardWidth,
-            duration: 0.8,
-            ease: "power3.inOut",
-            onComplete: () => {
-                isTransitioning.current = false;
-                
-                // Infinite Loop Reset
-                if (currentIndex >= newsData.length + 3) {
-                    gsap.set(sliderTrackRef.current, { x: -3 * cardWidth });
-                    setCurrentIndex(3);
-                } else if (currentIndex <= 0) {
-                    gsap.set(sliderTrackRef.current, { x: -newsData.length * cardWidth });
-                    setCurrentIndex(newsData.length);
-                }
-            }
-        });
+      isTransitioning.current = true;
+      const cardWidth = sliderTrackRef.current.children[0].offsetWidth + 40; // width + gap
+
+      gsap.to(sliderTrackRef.current, {
+        x: -currentIndex * cardWidth,
+        duration: 0.8,
+        ease: "power3.inOut",
+        onComplete: () => {
+          isTransitioning.current = false;
+
+          // Infinite Loop Reset
+          if (currentIndex >= newsData.length + 3) {
+            gsap.set(sliderTrackRef.current, { x: -3 * cardWidth });
+            setCurrentIndex(3);
+          } else if (currentIndex <= 0) {
+            gsap.set(sliderTrackRef.current, { x: -newsData.length * cardWidth });
+            setCurrentIndex(newsData.length);
+          }
+        }
+      });
     }
   }, [currentIndex, newsData.length]);
 
@@ -463,9 +461,8 @@ function Home() {
     <div className="relative w-full overflow-x-clip bg-[#F7F7F5]">
       {/* Loading overlay */}
       <div
-        className={`fixed inset-0 z-100 bg-[#745893] transition-transform duration-700 ease-in-out ${
-          isLoading ? 'translate-y-0' : '-translate-y-full'
-        }`}
+        className={`fixed inset-0 z-100 bg-[#745893] transition-transform duration-700 ease-in-out ${isLoading ? 'translate-y-0' : '-translate-y-full'
+          }`}
       />
 
       {/* Fixed Navbar */}
@@ -482,21 +479,26 @@ function Home() {
         }}
       >
         <div className="px-24 -mb-12">
-          <TitleLine text="DROGA" refEl={drogaRef} bgStyle={bgStyles.droga} />
-          <TitleLine
-            text="PHYSIOTHERAPY"
-            refEl={physioRef}
-            bgStyle={bgStyles.physio}
-          />
+          <div className="relative inline-flex flex-col items-start w-fit">
+            <TitleLine text="DROGA" refEl={drogaRef} bgStyle={bgStyles.droga} />
+
+            {/* Extra text positioned above PHYSIOTHERAPY on the right */}
+            <span
+              className="font-semibold text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white uppercase drop-shadow-md absolute right-0 bottom-[55%] z-10 translate-y-[20%] translate-x-[100%]"
+              style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
+            >
+              PAIN FREE MOBILITY!
+            </span>
+
+            <TitleLine
+              text="PHYSIOTHERAPY"
+              refEl={physioRef}
+              bgStyle={bgStyles.physio}
+            />
+          </div>
         </div>
 
-        {/* Extra text from second version */}
-        <span
-          className="font-semibold text-3xl md:text-4xl lg:text-5xl text-white uppercase drop-shadow-md absolute right-[5%] xl:right-[10%] top-[25vh] text-right"
-          style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
-        >
-          PAIN FREE MOBILITY!
-        </span>
+
 
         <p className="absolute left-[8%] xl:left-[12%] top-[82vh] text-[#F7F7F5] capitalize font-semibold text-base md:text-2xl max-w-sm xl:max-w-2xl">
           DROGA Physiotherapy is the biggest physiotherapy clinic in Ethiopia.
@@ -576,18 +578,18 @@ function Home() {
           <Link to="/about" className="flex items-center gap-3 border border-[#745893] px-6 py-3 rounded-full bg-[#745893] text-white hover:text-[#FFF200] transition-all duration-300 w-fit">
             View More
             <svg
-                className="w-5 h-5 transition-colors duration-300 group-hover:text-[#FFF200]"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              className="w-5 h-5 transition-colors duration-300 group-hover:text-[#FFF200]"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </Link>
         </div>
       </div>
@@ -600,9 +602,9 @@ function Home() {
         {/* HORIZONTAL SCROLLING SERVICES CONTAINER */}
         <div ref={servicesRef} className="w-full h-[300vh] relative z-20 pointer-events-auto">
           <div className="w-full h-screen sticky top-0 bg-[#745893] overflow-hidden flex flex-col justify-between px-24 py-16">
-            
+
             {/* Horizontal Sliding Filmstrip */}
-            <div 
+            <div
               className="absolute top-25 left-30 h-[65vh] w-[300vw] flex"
               style={{ transform: `translateX(-${serviceProgress * 220}vw)` }}
             >
@@ -664,12 +666,12 @@ function Home() {
             <div className="w-full relative top-5 mt-auto z-20">
               {/* Dynamic Progress line */}
               <div className="w-full h-[2px] bg-white/30 mb-6 relative">
-                <div 
+                <div
                   className="absolute top-0 left-0 h-full w-full bg-[#F7F7F5] origin-left transition-transform duration-150 ease-out"
                   style={{ transform: `scaleX(${Math.max(0.02, serviceProgress)})` }}
                 />
               </div>
-              
+
               <div className="flex justify-between items-center">
                 <div className="text-white text-xl font-light tracking-widest">
                   [{Math.round(serviceProgress * 2) + 1}/3]
@@ -710,37 +712,36 @@ function Home() {
 
             {/* Main testimonial layout */}
             <div className="w-full max-w-6xl flex flex-col md:flex-row items-stretch">
-              
+
               {/* Left: Blue div */}
               <div className="relative bottom-3 scale-95 w-full md:w-1/2 h-[350px] md:h-[450px] lg:h-[500px] flex items-center justify-center">
-          {testimonials.map((item, index) => {
-            const isFront = index === activeIndex;
-            const isMiddle = index === (activeIndex + 1) % testimonials.length;
-            const isBack = index === (activeIndex + 2) % testimonials.length;
+                {testimonials.map((item, index) => {
+                  const isFront = index === activeIndex;
+                  const isMiddle = index === (activeIndex + 1) % testimonials.length;
+                  const isBack = index === (activeIndex + 2) % testimonials.length;
 
-            return (
-              <div
-                key={index}
-                className={`absolute inset-0 m-auto w-3/5 h-full rounded-[15px] overflow-hidden transition-all duration-500 ease-in-out border-b-5 border-[#F7F7F5]
+                  return (
+                    <div
+                      key={index}
+                      className={`absolute inset-0 m-auto w-3/5 h-full rounded-[15px] overflow-hidden transition-all duration-500 ease-in-out border-b-5 border-[#F7F7F5]
                   ${isFront ? 'z-30 translate-y-0 scale-100 opacity-100 shadow-xl' : ''}
                   ${isMiddle ? 'z-20 translate-y-6 scale-[0.98] opacity-100' : ''}
                   ${isBack ? 'z-10 translate-y-12 scale-[0.95] opacity-100' : 'opacity-0'}
                 `}
-                style={{
-                  backgroundColor: isFront ? 'transparent' : '#D1C6E0',
-                }}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className={`w-full h-full object-cover transition-opacity duration-500 ${
-                    isFront ? 'opacity-100' : 'opacity-40'
-                  }`}
-                />
+                      style={{
+                        backgroundColor: isFront ? 'transparent' : '#D1C6E0',
+                      }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className={`w-full h-full object-cover transition-opacity duration-500 ${isFront ? 'opacity-100' : 'opacity-40'
+                          }`}
+                      />
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
 
               {/* Right: Red div */}
               <div className="w-full md:w-1/2 h-[350px] md:h-[450px] lg:h-[500px] flex flex-col justify-between text-left p-4 md:p-8 shrink-0">
@@ -806,9 +807,8 @@ function Home() {
                     {testimonials.map((_, i) => (
                       <div
                         key={i}
-                        className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
-                          i === activeIndex ? 'bg-[#745893]' : 'bg-gray-300'
-                        }`}
+                        className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${i === activeIndex ? 'bg-[#745893]' : 'bg-gray-300'
+                          }`}
                       />
                     ))}
                   </div>
@@ -819,12 +819,12 @@ function Home() {
         </section>
 
         {/* ========== Mission & Vision ========== */}
-        <section 
+        <section
           ref={sectionRef}
           className="relative z-30 bg-[#745893] py-15 px-6 md:px-24 flex items-center justify-center overflow-hidden pointer-events-auto"
         >
           <div className="mv-card relative w-full max-w-7xl backdrop-blur-sm rounded-[20px] overflow-hidden flex flex-col md:flex-row md:h-3/4">
-            
+
             {/* LEFT PANEL: VISION */}
             <div className="relative w-full md:w-1/2 min-h-[50vh] xl:min-h-[60vh] flex flex-col justify-between p-8 md:p-12 lg:p-16 group">
               {/* Background Image Layer */}
@@ -833,7 +833,7 @@ function Home() {
                 <img src={IMG_3575} alt="Vision" className="w-full h-full object-cover" />
               </div>
 
-              <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'> 
+              <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'>
                 <div className="relative z-10">
                   <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
                     “To be Ethiopia’s leading physiotherapy and rehabilitation provider,
@@ -842,7 +842,7 @@ function Home() {
                 </div>
 
                 <div className="relative z-10">
-                  <h2 
+                  <h2
                     ref={visionTitleRef}
                     className="text-6xl md:text-8xl font-semibold text-[#FFF200] leading-none uppercase select-none opacity-80"
                   >
@@ -860,23 +860,23 @@ function Home() {
                 <img src={IMG_3651} alt="Vision" className="w-full h-full object-cover" />
               </div>
 
-              <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'> 
+              <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'>
                 <div className="relative z-10">
-                <h2 
-                  ref={missionTitleRef}
-                  className="text-6xl md:text-8xl font-semibold text-[#FFF200] leading-none uppercase select-none opacity-80"
-                >
-                  MISSION
-                </h2>
-              </div>
+                  <h2
+                    ref={missionTitleRef}
+                    className="text-6xl md:text-8xl font-semibold text-[#FFF200] leading-none uppercase select-none opacity-80"
+                  >
+                    MISSION
+                  </h2>
+                </div>
 
-              <div className="relative z-10">
-                <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
-                  “We deliver evidence-based, patient-centered physiotherapy services
-                  that restore function, reduce pain, and enhance quality of life through
-                  skilled professionals and innovative rehabilitation solutions.”
-                </p>
-              </div>
+                <div className="relative z-10">
+                  <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
+                    “We deliver evidence-based, patient-centered physiotherapy services
+                    that restore function, reduce pain, and enhance quality of life through
+                    skilled professionals and innovative rehabilitation solutions.”
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -915,102 +915,102 @@ function Home() {
 
             {/* Cards Slider Track */}
             <div className="relative overflow-hidden -mx-6 md:-mx-0 px-6 md:px-0">
-                <div 
-                    ref={sliderTrackRef}
-                    className="flex gap-10 transition-none"
-                    style={{ width: 'max-content' }}
-                >
-                    {bufferedNews.map((item, index) => (
-                        <div 
-                            key={`${item.title}-${index}`} 
-                            className="flex flex-col gap-5 w-[calc(100vw-48px)] md:w-[380px] lg:w-[420px] xl:w-[480px] shrink-0"
-                        >
-                            {/* Image Header */}
-                            <div
-                                className="rounded-2xl overflow-hidden h-[250px] flex items-end p-6 text-white bg-cover bg-center relative group"
-                                style={{ backgroundImage: `url(${item.img})` }}
-                            >
-                                {/* Overlay Gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/70 transition-all duration-300"></div>
-                                <p className="relative z-10 text-xl font-bold whitespace-pre-line leading-tight">
-                                    {item.title}
-                                </p>
-                            </div>
+              <div
+                ref={sliderTrackRef}
+                className="flex gap-10 transition-none"
+                style={{ width: 'max-content' }}
+              >
+                {bufferedNews.map((item, index) => (
+                  <div
+                    key={`${item.title}-${index}`}
+                    className="flex flex-col gap-5 w-[calc(100vw-48px)] md:w-[380px] lg:w-[420px] xl:w-[480px] shrink-0"
+                  >
+                    {/* Image Header */}
+                    <div
+                      className="rounded-2xl overflow-hidden h-[250px] flex items-end p-6 text-white bg-cover bg-center relative group"
+                      style={{ backgroundImage: `url(${item.img})` }}
+                    >
+                      {/* Overlay Gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/70 transition-all duration-300"></div>
+                      <p className="relative z-10 text-xl font-bold whitespace-pre-line leading-tight">
+                        {item.title}
+                      </p>
+                    </div>
 
-                            {/* Tag & Social Icon */}
-                            <div className="flex items-center justify-between w-full">
-                                <span className="text-xs font-semibold border border-[#745893]/30 px-3 py-1 rounded-full text-[#745893] uppercase tracking-wider">
-                                    # News
-                                </span>
+                    {/* Tag & Social Icon */}
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-xs font-semibold border border-[#745893]/30 px-3 py-1 rounded-full text-[#745893] uppercase tracking-wider">
+                        # News
+                      </span>
 
-                                <div className="w-10 h-10 rounded-full border border-[#745893] bg-[#745893] flex items-center justify-center cursor-pointer transition-all hover:bg-[#5d4677] hover:scale-110 shadow-md">
-                                    <svg className="w-5 h-5 text-[#F7F7F5]" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.22 8h4.54v14H.22V8zm7.56 0h4.35v1.92h.06c.61-1.16 2.1-2.38 4.33-2.38 4.63 0 5.48 3.05 5.48 7.02V22h-4.54v-6.93c0-1.65-.03-3.78-2.3-3.78-2.3 0-2.65 1.8-2.65 3.66V22H7.78V8z" />
-                                    </svg>
-                                </div>
-                            </div>
+                      <div className="w-10 h-10 rounded-full border border-[#745893] bg-[#745893] flex items-center justify-center cursor-pointer transition-all hover:bg-[#5d4677] hover:scale-110 shadow-md">
+                        <svg className="w-5 h-5 text-[#F7F7F5]" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.22 8h4.54v14H.22V8zm7.56 0h4.35v1.92h.06c.61-1.16 2.1-2.38 4.33-2.38 4.63 0 5.48 3.05 5.48 7.02V22h-4.54v-6.93c0-1.65-.03-3.78-2.3-3.78-2.3 0-2.65 1.8-2.65 3.66V22H7.78V8z" />
+                        </svg>
+                      </div>
+                    </div>
 
-                            {/* Content Snippet */}
-                            <p className="text-[#5F5A66] text-sm leading-relaxed line-clamp-3">
-                                {item.content}
-                            </p>
+                    {/* Content Snippet */}
+                    <p className="text-[#5F5A66] text-sm leading-relaxed line-clamp-3">
+                      {item.content}
+                    </p>
 
-                            {/* Footer */}
-                            <div className="flex justify-between items-center text-xs mt-auto border-t border-gray-100 pt-4">
-                                <span className="text-gray-400 font-medium tracking-wide">{item.date}</span>
-                                <Link to="/news" className="text-[#745893] font-bold cursor-pointer hover:underline underline-offset-4 flex items-center gap-1 group/more">
-                                    Read More 
-                                    <span className="transition-transform group-hover/more:translate-x-1">→</span>
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                    {/* Footer */}
+                    <div className="flex justify-between items-center text-xs mt-auto border-t border-gray-100 pt-4">
+                      <span className="text-gray-400 font-medium tracking-wide">{item.date}</span>
+                      <Link to="/news" className="text-[#745893] font-bold cursor-pointer hover:underline underline-offset-4 flex items-center gap-1 group/more">
+                        Read More
+                        <span className="transition-transform group-hover/more:translate-x-1">→</span>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Navigation Buttons Row - Positioned at the bottom right */}
             <div className="flex justify-end items-center gap-6 mt-4">
-                {/* Previous Button */}
-                <button
-                    onClick={prevSlide}
-                    aria-label="Previous News"
-                    className="w-14 h-14 rounded-full border-2 border-[#745893]/20 flex items-center justify-center text-[#745893] hover:bg-[#745893] hover:text-[#F7F7F5] hover:border-[#745893] transition-all duration-500 group shadow-sm hover:shadow-xl"
+              {/* Previous Button */}
+              <button
+                onClick={prevSlide}
+                aria-label="Previous News"
+                className="w-14 h-14 rounded-full border-2 border-[#745893]/20 flex items-center justify-center text-[#745893] hover:bg-[#745893] hover:text-[#F7F7F5] hover:border-[#745893] transition-all duration-500 group shadow-sm hover:shadow-xl"
+              >
+                <svg
+                  className="w-6 h-6 rotate-180 transition-transform duration-500 group-hover:-translate-x-1"
+                  viewBox="0 0 20 20"
+                  fill="none"
                 >
-                    <svg
-                        className="w-6 h-6 rotate-180 transition-transform duration-500 group-hover:-translate-x-1"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                    >
-                        <path
-                            d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-                </button>
+                  <path
+                    d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
 
-                {/* Next Button */}
-                <button
-                    onClick={nextSlide}
-                    aria-label="Next News"
-                    className="w-14 h-14 rounded-full bg-[#745893] text-[#F7F7F5] flex items-center justify-center hover:bg-[#5d4677] transition-all duration-500 group shadow-md hover:shadow-2xl hover:-translate-y-1"
+              {/* Next Button */}
+              <button
+                onClick={nextSlide}
+                aria-label="Next News"
+                className="w-14 h-14 rounded-full bg-[#745893] text-[#F7F7F5] flex items-center justify-center hover:bg-[#5d4677] transition-all duration-500 group shadow-md hover:shadow-2xl hover:-translate-y-1"
+              >
+                <svg
+                  className="w-6 h-6 transition-transform duration-500 group-hover:translate-x-1"
+                  viewBox="0 0 20 20"
+                  fill="none"
                 >
-                    <svg
-                        className="w-6 h-6 transition-transform duration-500 group-hover:translate-x-1"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                    >
-                        <path
-                            d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-                </button>
+                  <path
+                    d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </section>
