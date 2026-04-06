@@ -498,12 +498,12 @@ function Home() {
           PAIN FREE MOBILITY!
         </span>
 
-        <p className="absolute left-[8%] xl:left-[12%] top-[82vh] text-[#F7F7F5] capitalize font-semibold text-base md:text-xl max-w-sm xl:max-w-lg">
+        <p className="absolute left-[8%] xl:left-[12%] top-[82vh] text-[#F7F7F5] capitalize font-semibold text-base md:text-2xl max-w-sm xl:max-w-2xl">
           DROGA Physiotherapy is the biggest physiotherapy clinic in Ethiopia.
         </p>
 
         {/* Special offer box */}
-        <div className="absolute right-[3%] xl:right-[7%] top-[70vh] w-full md:w-auto max-w-[290px] md:max-w-[310px] bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 md:p-6 opacity-90 border border-white/20 transition-all hover:shadow-xl origin-top-right">
+        <div className="absolute right-[3%] xl:right-[10%] top-[70vh] w-full md:w-auto max-w-[290px] md:max-w-[310px] bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 md:p-6 opacity-90 border border-white/20 transition-all hover:shadow-xl origin-top-right">
           <div className="text-center md:text-left">
             <h3 className="text-[#755893] font-bold text-sm uppercase tracking-wider">
               SPECIAL OFFER
