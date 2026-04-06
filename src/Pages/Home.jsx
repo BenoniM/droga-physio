@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import '../index.css';
 import landingBg from '../assets/home/landingBg.jpg';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import IMG_3575 from '../assets/home/IMG_3575.JPG';
 import IMG_3651 from '../assets/home/IMG_3651.JPG';
-import physioLogoFooter from '../assets/general/physioLogo2.svg'
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -513,10 +514,10 @@ function Home() {
             <p className="text-[#745893] text-sm md:text-base mt-1 leading-relaxed">
               Your first consultation session. Limited slots available this month.
             </p>
-            <button className="mt-6 w-full bg-[#FFF200] hover:bg-[#5d3e78] text-[#333] font-semibold py-3 px-4 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-md">
+            <Link to="/appointment" className="mt-6 w-full bg-[#FFF200] hover:bg-[#5d3e78] text-[#333] hover:text-[#F7F7F5] font-semibold py-3 px-4 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-md">
               Book An Appointment
               <svg
-                className="w-5 h-5 text-[#333] transition-colors duration-300 group-hover:text-[#FFF200]"
+                className="w-5 h-5 transition-colors duration-300 group-hover:text-[#F7F7F5]"
                 viewBox="0 0 20 20"
                 fill="none"
               >
@@ -528,7 +529,7 @@ function Home() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -572,10 +573,10 @@ function Home() {
         </div>
 
         <div>
-          <button className="flex items-center gap-3 border border-[#745893] px-6 py-3 rounded-full bg-[#745893] text-white hover:text-[#FFF200] transition-all duration-300">
+          <Link to="/about" className="flex items-center gap-3 border border-[#745893] px-6 py-3 rounded-full bg-[#745893] text-white hover:text-[#FFF200] transition-all duration-300 w-fit">
             View More
             <svg
-                className="w-5 h-5 text-[#F7F7F5] transition-colors duration-300 group-hover:text-[#FFF200]"
+                className="w-5 h-5 transition-colors duration-300 group-hover:text-[#FFF200]"
                 viewBox="0 0 20 20"
                 fill="none"
               >
@@ -587,23 +588,23 @@ function Home() {
                   strokeLinejoin="round"
                 />
               </svg>
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* Primary Scrolling Content Area */}
-      <div className="relative z-10 flex flex-col w-full">
+      <div className="relative z-10 flex flex-col w-full pointer-events-none">
         {/* Massive transparent spacer */}
         <div className="h-[230vh] w-full" />
 
         {/* HORIZONTAL SCROLLING SERVICES CONTAINER */}
-        <div ref={servicesRef} className="w-full h-[300vh] relative z-20">
+        <div ref={servicesRef} className="w-full h-[300vh] relative z-20 pointer-events-auto">
           <div className="w-full h-screen sticky top-0 bg-[#745893] overflow-hidden flex flex-col justify-between px-24 py-16">
             
             {/* Horizontal Sliding Filmstrip */}
             <div 
-              className="absolute top-25 left-0 h-[65vh] w-[300vw] flex"
-              style={{ transform: `translateX(-${serviceProgress * 200}vw)` }}
+              className="absolute top-25 left-30 h-[65vh] w-[300vw] flex"
+              style={{ transform: `translateX(-${serviceProgress * 220}vw)` }}
             >
               {/* SLIDE 1 */}
               <div className="w-screen px-24 flex justify-between items-start relative h-full">
@@ -673,7 +674,7 @@ function Home() {
                 <div className="text-white text-xl font-light tracking-widest">
                   [{Math.round(serviceProgress * 2) + 1}/3]
                 </div>
-                <a href="#services" className="flex items-center gap-3 text-[#FFF200] text-xl font-light tracking-wide hover:opacity-80 transition-opacity">
+                <Link to="/service" className="flex items-center gap-3 text-[#FFF200] text-xl font-light tracking-wide hover:opacity-80 transition-opacity">
                   View All Services
                   <svg
                     className="w-7 h-7 text-[#FFF200] transition-colors duration-300 -rotate-45 group-hover:text-[#FFF200]"
@@ -688,14 +689,14 @@ function Home() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
 
         {/* ========== NEW TESTIMONIAL SECTION ========== */}
-        <section className="relative z-10 bg-[#F7F7F5] h-screen py-16 overflow-hidden">
+        <section className="relative z-10 bg-[#F7F7F5] h-screen py-16 overflow-hidden pointer-events-auto">
           <div className="mx-auto px-6 md:px-24 flex flex-col items-center">
             {/* Heading */}
             <h2 className="text-[#745893] text-3xl md:text-4xl lg:text-6xl leading-tight mb-2 text-center">
@@ -820,7 +821,7 @@ function Home() {
         {/* ========== Mission & Vision ========== */}
         <section 
           ref={sectionRef}
-          className="relative z-30 bg-[#745893] py-15 px-6 md:px-24 flex items-center justify-center overflow-hidden"
+          className="relative z-30 bg-[#745893] py-15 px-6 md:px-24 flex items-center justify-center overflow-hidden pointer-events-auto"
         >
           <div className="mv-card relative w-full max-w-7xl backdrop-blur-sm rounded-[20px] overflow-hidden flex flex-col md:flex-row md:h-3/4">
             
@@ -885,7 +886,7 @@ function Home() {
         </section>
 
         {/* ========== NEWS SECTION ========== */}
-        <section className="relative z-10 bg-[#F7F7F5] min-h-screen py-16 px-6 md:px-24 flex flex-col justify-center">
+        <section className="relative z-10 bg-[#F7F7F5] min-h-screen py-16 px-6 md:px-24 flex flex-col justify-center pointer-events-auto">
           <div className="w-full max-w-7xl mx-auto flex flex-col gap-10">
 
             {/* Header */}
@@ -894,7 +895,7 @@ function Home() {
                 Droga Physiotherapy Social <br /> Media Posts
               </h2>
 
-              <button className="bg-[#745893] text-white px-4 py-2.5 rounded-full flex items-center gap-2 hover:bg-[#5d4677] transition shadow-md">
+              <Link to="/news" className="bg-[#745893] text-white px-4 py-2.5 rounded-full flex items-center gap-2 hover:bg-[#5d4677] transition shadow-md">
                 View More
                 <svg
                   className="w-5 h-5"
@@ -909,7 +910,7 @@ function Home() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </button>
+              </Link>
             </div>
 
             {/* Cards Slider Track */}
@@ -957,10 +958,10 @@ function Home() {
                             {/* Footer */}
                             <div className="flex justify-between items-center text-xs mt-auto border-t border-gray-100 pt-4">
                                 <span className="text-gray-400 font-medium tracking-wide">{item.date}</span>
-                                <span className="text-[#745893] font-bold cursor-pointer hover:underline underline-offset-4 flex items-center gap-1 group/more">
+                                <Link to="/news" className="text-[#745893] font-bold cursor-pointer hover:underline underline-offset-4 flex items-center gap-1 group/more">
                                     Read More 
                                     <span className="transition-transform group-hover/more:translate-x-1">→</span>
-                                </span>
+                                </Link>
                             </div>
                         </div>
                     ))}
@@ -1015,7 +1016,7 @@ function Home() {
         </section>
 
         {/* ========== LOCATIONS SECTION ========== */}
-        <section className="relative z-10 bg-[#F7F7F5] min-h-[calc(100vh-80px)] px-6 md:px-24 py-10 overflow-hidden flex flex-col">
+        <section className="relative z-10 bg-[#F7F7F5] min-h-[calc(100vh-80px)] px-6 md:px-24 py-10 overflow-hidden flex flex-col pointer-events-auto">
           {/* Header */}
           <div className="mb-6">
             <h2 className="text-[#745893] font-semibold text-2xl md:text-4xl leading-none uppercase">
@@ -1094,13 +1095,13 @@ function Home() {
 
                 {/* Buttons */}
                 <div className="flex gap-3 mt-4">
-                  <button className="bg-[#FFF200] px-5 py-2 rounded-full text-sm font-semibold">
+                  <Link to="/appointment" className="bg-[#FFF200] px-5 py-2 rounded-full text-sm font-semibold">
                     Set Appointment
-                  </button>
+                  </Link>
 
-                  <button className="bg-[#745893] text-white px-5 py-2 rounded-full text-sm">
+                  <Link to="/appointment" className="bg-[#745893] text-white px-5 py-2 rounded-full text-sm">
                     View Map
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -1131,112 +1132,9 @@ function Home() {
         </section>
 
         {/* ========== FOOTER ========== */}
-        <footer className="relative bg-[#745893] text-white overflow-hidden px-6 md:px-16 lg:px-20 h-[75vh] flex flex-col">
-
-            {/* Main Content */}
-            <div className="flex flex-col justify-between">
-
-            {/* Top Row */}
-            <div className="flex flex-col lg:flex-row gap-50 mt-10">
-
-                {/* DROGA */}
-                <div className="font-['Compacta'] uppercase leading-[0.85] text-[clamp(5rem,14vw,50rem)] tracking-tight">
-                DROGA
-                </div>
-
-                {/* Right columns */}
-                <div className="flex gap-15 md:gap-20 lg:gap-30">
-
-                {/* Pages */}
-                <div>
-                    <h4 className="text-xl md:text-2xl mb-4 w-20">Pages</h4>
-                    <div className="space-y-2 text-sm md:text-[15px] font-light">
-                    <div className="cursor-pointer hover:text-white">Home</div>
-                    <div className="cursor-pointer hover:text-white">About Us</div>
-                    <div className="cursor-pointer hover:text-white">Services</div>
-                    <div className="cursor-pointer hover:text-white">Book Now</div>
-                    <div className="cursor-pointer hover:text-white">Contact Us</div>
-                    </div>
-                </div>
-
-                {/* Companies */}
-                <div>
-                    <h4 className="text-xl md:text-2xl mb-4">Companies</h4>
-                    <div className="space-y-2 text-sm md:text-[15px] font-light">
-                    <div className="cursor-pointer hover:text-white">Droga Pharma PLC</div>
-                    <div className="cursor-pointer hover:text-white">EMA Import and Export Pvt.Ltd</div>
-                    <div className="cursor-pointer hover:text-white">Trust Pharmaceutical Manufacturing PLC</div>
-                    <div className="cursor-pointer hover:text-white">Draga Pharmacy</div>
-                    </div>
-                </div>
-
-                {/* Contact */}
-                <div>
-                    <h4 className="text-xl md:text-2xl mb-4">Contact Us</h4>
-                    <div className="space-y-2 text-sm md:text-[15px] font-light">
-                    <div className="flex items-center gap-3 text-white/90">
-                        <svg className="w-5 h-5 text-[#FFF200]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                        <span className="text-base md:text-lg font-light">0974959595</span>
-                    </div>
-                    <div>0115578906 / 0965757526</div>
-                    <div>Addis Ababa, Ethiopia</div>
-                    <div>info@drogaphysiotherapy.com</div>
-                    </div>
-
-                    {/* YOUR ORIGINAL SVGs (UNCHANGED) */}
-                    <div className="mt-4 flex items-center gap-3">
-                    {[
-                        { 
-                        icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> 
-                        },
-                        { 
-                        icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> 
-                        },
-                        { 
-                        icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> 
-                        },
-                        { 
-                        icon: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                        }
-                    ].map((item, i) => (
-                        <div
-                        key={i}
-                        className="w-9 h-9 rounded-full border border-white/80 flex items-center justify-center hover:bg-white hover:text-[#745893] transition"
-                        >
-                        {item.icon}
-                        </div>
-                    ))}
-                    </div>
-                </div>
-
-                </div>
-            </div>
-
-            {/* Bottom Row */}
-            <div className="flex justify-between items-end mt-2">
-
-                <div className="font-['Compacta'] uppercase leading-[0.85] text-[clamp(5rem,14vw,50rem)] tracking-tight">
-                PHYSIOTHERAPY
-                </div>
-
-                <img src={physioLogoFooter} alt="Droga Physiotherapy" className="h-25 md:h-30" />
-            </div>
-
-            {/* Bottom line */}
-            <div className="border-t border-white/30 mb-5 pt-3 flex justify-between text-xs md:text-sm text-white/80 mt-5">
-                <div>Powered by Droga Consulting © 2026</div>
-
-                <div className="flex items-center gap-4">
-                <span className="cursor-pointer hover:text-white">All Rights Reserved</span>
-                <span className="w-px h-4 bg-white/40" />
-                <span className="cursor-pointer hover:text-white">Privacy Policy</span>
-                </div>
-            </div>
-
-            </div>
-        </footer>
+        <div className="pointer-events-auto">
+          <Footer />
+        </div>
       </div>
     </div>
   );

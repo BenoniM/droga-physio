@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import physioLogoFooter from '../assets/general/physioLogo2.svg'
+import Footer from '../components/Footer'
 import CtaBgImg from '../assets/about/cta_background.png'
 
 // ── Hooks ────────────────────────────────────────────────────────────────────
@@ -395,8 +396,7 @@ export default function Blog() {
       {/* ── NEWSLETTER CTA ──────────────────────────────────────────────────── */}
       <NewsletterSection />
 
-      {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
-      <Footer physioLogoFooter={physioLogoFooter} />
+      <Footer />
     </div>
   )
 }
@@ -418,88 +418,13 @@ function NewsletterSection() {
             <h2 className="text-white text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
                 Start Your Journey to <br /> Pain-Free Mobility Today!
             </h2>
-            <button className="bg-white text-[#745893] px-10 py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
+            <Link to="/appointment" className="bg-white text-[#745893] px-10 py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
                 Book An Appointment
                 <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                     <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-            </button>
+            </Link>
         </div>
     </section>
-  )
-}
-
-function Footer({ physioLogoFooter }) {
-  return (
-    <footer className="relative bg-[#745893] text-white overflow-hidden px-6 md:px-16 lg:px-20 h-[75vh] flex flex-col">
-      <div className="flex flex-col justify-between">
-        <div className="flex flex-col lg:flex-row gap-50 mt-10">
-          <div className="font-['Compacta'] uppercase leading-[0.85] text-[clamp(5rem,14vw,50rem)] tracking-tight">
-            DROGA
-          </div>
-          <div className="flex gap-15 md:gap-20 lg:gap-30">
-            <div>
-              <h4 className="text-xl md:text-2xl mb-4 w-20">Pages</h4>
-              <div className="space-y-2 text-sm md:text-[15px] font-light">
-                <div className="cursor-pointer hover:text-white">Home</div>
-                <div className="cursor-pointer hover:text-white">About Us</div>
-                <div className="cursor-pointer hover:text-white">Services</div>
-                <div className="cursor-pointer hover:text-white">Book Now</div>
-                <div className="cursor-pointer hover:text-white">Contact Us</div>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xl md:text-2xl mb-4">Companies</h4>
-              <div className="space-y-2 text-sm md:text-[15px] font-light">
-                <div className="cursor-pointer hover:text-white">Droga Pharma PLC</div>
-                <div className="cursor-pointer hover:text-white">EMA Import and Export Pvt.Ltd</div>
-                <div className="cursor-pointer hover:text-white">Trust Pharmaceutical Manufacturing PLC</div>
-                <div className="cursor-pointer hover:text-white">Draga Pharmacy</div>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xl md:text-2xl mb-4">Contact Us</h4>
-              <div className="space-y-2 text-sm md:text-[15px] font-light">
-                <div className="flex items-center gap-3 text-white/90">
-                  <svg className="w-5 h-5 text-[#FFF200]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  <span className="text-base md:text-lg font-light">0974959595</span>
-                </div>
-                <div>0115578906 / 0965757526</div>
-                <div>Addis Ababa, Ethiopia</div>
-                <div>info@drogaphysiotherapy.com</div>
-              </div>
-              <div className="mt-4 flex items-center gap-3">
-                {[
-                  <svg key="fb" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
-                  <svg key="ig" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
-                  <svg key="tg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-                  <svg key="ph" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
-                ].map((icon, i) => (
-                  <div key={i} className="w-9 h-9 rounded-full border border-white/80 flex items-center justify-center hover:bg-white hover:text-[#745893] transition">
-                    {icon}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-between items-end mt-2">
-          <div className="font-['Compacta'] uppercase leading-[0.85] text-[clamp(5rem,14vw,50rem)] tracking-tight">
-            PHYSIOTHERAPY
-          </div>
-          <img src={physioLogoFooter} alt="Droga Physiotherapy" className="h-25 md:h-30" />
-        </div>
-        <div className="border-t border-white/30 mb-5 pt-3 flex justify-between text-xs md:text-sm text-white/80 mt-5">
-          <div>Powered by Droga Consulting © 2026</div>
-          <div className="flex items-center gap-4">
-            <span className="cursor-pointer hover:text-white">All Rights Reserved</span>
-            <span className="w-px h-4 bg-white/40" />
-            <span className="cursor-pointer hover:text-white">Privacy Policy</span>
-          </div>
-        </div>
-      </div>
-    </footer>
   )
 }
