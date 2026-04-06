@@ -492,32 +492,32 @@ function Home() {
 
         {/* Extra text from second version */}
         <span
-          className="font-semibold text-3xl md:text-4xl lg:text-5xl text-white uppercase drop-shadow-md absolute left-243 top-60 w-full"
+          className="font-semibold text-3xl md:text-4xl lg:text-5xl text-white uppercase drop-shadow-md absolute right-[5%] xl:right-[10%] top-[25vh] text-right"
           style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
         >
           PAIN FREE MOBILITY!
         </span>
 
-        <p className="absolute ml-24 top-145 text-[#F7F7F5] capitalize font-semibold text-lg md:text-2xl max-w-2xl">
+        <p className="absolute left-[8%] xl:left-[12%] top-[82vh] text-[#F7F7F5] capitalize font-semibold text-base md:text-xl max-w-sm xl:max-w-lg">
           DROGA Physiotherapy is the biggest physiotherapy clinic in Ethiopia.
         </p>
 
         {/* Special offer box */}
-        <div className="absolute scale-80 left-268 top-110 w-full md:w-auto max-w-sm bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8 opacity-90 border border-white/20 transition-all hover:shadow-xl">
+        <div className="absolute right-[3%] xl:right-[7%] top-[70vh] w-full md:w-auto max-w-[290px] md:max-w-[310px] bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 md:p-6 opacity-90 border border-white/20 transition-all hover:shadow-xl origin-top-right">
           <div className="text-center md:text-left">
-            <h3 className="text-[#FFF200] font-semibold text-base uppercase tracking-wider">
+            <h3 className="text-[#755893] font-bold text-sm uppercase tracking-wider">
               SPECIAL OFFER
             </h3>
-            <div className="text-4xl md:text-5xl font-black text-[#745893] my-2">
+            <div className="text-3xl md:text-4xl font-black text-[#745893] my-1.5">
               15% OFF
             </div>
-            <p className="text-[#745893] text-sm md:text-base mt-1 leading-relaxed">
+            <p className="text-[#745893] text-xs md:text-sm mt-1 leading-relaxed">
               Your first consultation session. Limited slots available this month.
             </p>
-            <Link to="/appointment" className="mt-6 w-full bg-[#FFF200] hover:bg-[#5d3e78] text-[#333] hover:text-[#F7F7F5] font-semibold py-3 px-4 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-md">
+            <Link to="/appointment" className="mt-4 w-full bg-[#FFF200] hover:bg-[#5d3e78] text-[#333] hover:text-[#F7F7F5] font-semibold py-2.5 px-4 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-sm text-sm">
               Book An Appointment
               <svg
-                className="w-5 h-5 transition-colors duration-300 group-hover:text-[#F7F7F5]"
+                className="w-4 h-4 transition-colors duration-300 group-hover:text-[#F7F7F5]"
                 viewBox="0 0 20 20"
                 fill="none"
               >
@@ -696,7 +696,7 @@ function Home() {
         </div>
 
         {/* ========== NEW TESTIMONIAL SECTION ========== */}
-        <section className="relative z-10 bg-[#F7F7F5] h-screen py-16 overflow-hidden pointer-events-auto">
+        <section className="relative z-10 bg-[#F7F7F5] min-h-screen py-16 md:py-24 overflow-hidden flex items-center pointer-events-auto">
           <div className="mx-auto px-6 md:px-24 flex flex-col items-center">
             {/* Heading */}
             <h2 className="text-[#745893] text-3xl md:text-4xl lg:text-6xl leading-tight mb-2 text-center">
@@ -712,7 +712,7 @@ function Home() {
             <div className="w-full max-w-6xl flex flex-col md:flex-row items-stretch">
               
               {/* Left: Blue div */}
-              <div className="relative bottom-3 scale-95 w-full md:w-1/2 h-[300px] md:h-[400px] flex items-center justify-center">
+              <div className="relative bottom-3 scale-95 w-full md:w-1/2 h-[350px] md:h-[450px] lg:h-[500px] flex items-center justify-center">
           {testimonials.map((item, index) => {
             const isFront = index === activeIndex;
             const isMiddle = index === (activeIndex + 1) % testimonials.length;
@@ -743,7 +743,7 @@ function Home() {
         </div>
 
               {/* Right: Red div */}
-              <div className="w-full md:w-1/2 h-[300px] md:h-[400px] flex flex-col justify-between  text-left">
+              <div className="w-full md:w-1/2 h-[350px] md:h-[450px] lg:h-[500px] flex flex-col justify-between text-left p-4 md:p-8 shrink-0">
                 {/* Top content */}
                 <div className="space-y-6">
                   <p className="text-[#333] text-lg md:text-xl leading-relaxed font-light italic">
@@ -826,15 +826,15 @@ function Home() {
           <div className="mv-card relative w-full max-w-7xl backdrop-blur-sm rounded-[20px] overflow-hidden flex flex-col md:flex-row md:h-3/4">
             
             {/* LEFT PANEL: VISION */}
-            <div className="relative w-full md:w-1/2 h-[55vh] flex flex-col justify-between p-12 group">
+            <div className="relative w-full md:w-1/2 min-h-[50vh] xl:min-h-[60vh] flex flex-col justify-between p-8 md:p-12 lg:p-16 group">
               {/* Background Image Layer */}
               <div className="absolute inset-0 z-0 opacity-30 grayscale group-hover:grayscale-0 transition-all group-hover:opacity-60 duration-700">
                 {/* Replace with your local asset */}
                 <img src={IMG_3575} alt="Vision" className="w-full h-full object-cover" />
               </div>
 
-              <div className='flex flex-col gap-20 justify-center'> 
-                <div className="relative z-10 h-1/2 h-30">
+              <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'> 
+                <div className="relative z-10">
                   <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
                     “To be Ethiopia’s leading physiotherapy and rehabilitation provider,
                     transforming lives through excellence in movement and care.”
@@ -853,14 +853,14 @@ function Home() {
             </div>
 
             {/* RIGHT PANEL: MISSION */}
-            <div className="relative w-full md:w-1/2 h-[55vh] flex flex-col justify-between p-12 group">
+            <div className="relative w-full md:w-1/2 min-h-[50vh] xl:min-h-[60vh] flex flex-col justify-between p-8 md:p-12 lg:p-16 group">
               {/* Background Image Layer */}
               <div className="absolute inset-0 z-0 opacity-30 grayscale group-hover:grayscale-0 transition-all group-hover:opacity-60 duration-700">
                 {/* Replace with your local asset */}
                 <img src={IMG_3651} alt="Vision" className="w-full h-full object-cover" />
               </div>
 
-              <div className='flex flex-col gap-20 justify-center'> 
+              <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'> 
                 <div className="relative z-10">
                 <h2 
                   ref={missionTitleRef}
@@ -870,7 +870,7 @@ function Home() {
                 </h2>
               </div>
 
-              <div className="relative z-10 h-1/2 h-30">
+              <div className="relative z-10">
                 <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
                   “We deliver evidence-based, patient-centered physiotherapy services
                   that restore function, reduce pain, and enhance quality of life through
@@ -923,7 +923,7 @@ function Home() {
                     {bufferedNews.map((item, index) => (
                         <div 
                             key={`${item.title}-${index}`} 
-                            className="flex flex-col gap-5 w-[calc(100vw-48px)] md:w-[380px] shrink-0"
+                            className="flex flex-col gap-5 w-[calc(100vw-48px)] md:w-[380px] lg:w-[420px] xl:w-[480px] shrink-0"
                         >
                             {/* Image Header */}
                             <div

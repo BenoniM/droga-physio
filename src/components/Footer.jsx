@@ -23,13 +23,13 @@ const Footer = () => {
   ];
 
   return (
-        <footer className="relative bg-[#745893] text-white overflow-hidden px-6 md:px-16 lg:px-20 h-[75vh] flex flex-col">
+        <footer className="relative bg-[#745893] text-white overflow-hidden px-6 md:px-16 lg:px-20 min-h-[60vh] md:min-h-[75vh] py-10 md:py-16 flex flex-col justify-between">
 
             {/* Main Content */}
             <div className="flex flex-col justify-between">
 
             {/* Top Row */}
-            <div className="flex flex-col lg:flex-row gap-50 mt-10">
+            <div className="flex flex-col lg:flex-row justify-between xl:gap-20 mt-4 md:mt-10">
 
                 {/* DROGA */}
                 <div className="font-['Compacta'] uppercase leading-[0.85] text-[clamp(5rem,14vw,50rem)] tracking-tight">
@@ -37,7 +37,7 @@ const Footer = () => {
                 </div>
 
                 {/* Right columns */}
-                <div className="flex gap-15 md:gap-20 lg:gap-30">
+                <div className="flex flex-wrap lg:flex-nowrap gap-10 md:gap-16 lg:gap-20 xl:gap-30 mt-8 lg:mt-0">
 
                 {/* Pages */}
                 <div className='z-50'>
