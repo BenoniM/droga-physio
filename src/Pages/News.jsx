@@ -118,13 +118,14 @@ function useReveal(threshold = 0.15) {
 }
 
 // ── Article Card ─────────────────────────────────────────────────────────────
-function ArticleCard({ article, index }) {
+function ArticleCard({ article, index, onClick }) {
   const [ref, visible] = useReveal(0.1)
   const delay = `${(index % 3) * 100}ms`
 
   return (
     <div
       ref={ref}
+      onClick={onClick}
       className="group relative overflow-hidden bg-white rounded-sm shadow-md hover:shadow-2xl cursor-pointer"
       style={{
         opacity: visible ? 1 : 0,
@@ -204,6 +205,14 @@ function Ticker() {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function News() {
+  const [selectedArticle, setSelectedArticle] = useState(null)
+  
+  useEffect(() => {
+    if (selectedArticle) {
+       window.scrollTo(0, 0);
+    }
+  }, [selectedArticle]);
+
   const [scrollY, setScrollY] = useState(0)
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
@@ -215,6 +224,23 @@ export default function News() {
   const historyRef = useRef(Array(BUBBLE_COUNT).fill({ x: -1000, y: -1000 }))
   const [maskStyle, setMaskStyle] = useState('')
   const [isInsideHero, setIsInsideHero] = useState(false)
+  const [isResponsive, setIsResponsive] = useState(window.innerWidth < 1024)
+
+  // Automatic blobs for high-fidelity fluid motion
+  const blobsRef = useRef(Array.from({ length: 5 }, (_, i) => ({
+      x: Math.random() * (window.innerWidth || 1000),
+      y: Math.random() * 600,
+      vx: (Math.random() - 0.5) * 1.2,
+      vy: (Math.random() - 0.5) * 1.2,
+      r: 40 + Math.random() * 60,
+      isCursor: i === 0 // First blob can follow cursor on desktop
+  })))
+
+  useEffect(() => {
+    const handleResize = () => setIsResponsive(window.innerWidth < 1024)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Scroll
   useEffect(() => {
@@ -226,22 +252,47 @@ export default function News() {
   // Comet animation loop
   useEffect(() => {
     let rafId
+    const el = heroRef.current
+
     const animate = () => {
-      historyRef.current.unshift({ ...targetRef.current })
-      if (historyRef.current.length > BUBBLE_COUNT) historyRef.current.pop()
-      const gradients = baseSizes
-        .map((size, i) => {
-          const pos = historyRef.current[i] || historyRef.current.at(-1)
-          return `radial-gradient(circle ${size / 2}px at ${pos.x}px ${pos.y}px, black 100%, transparent 100%)`
+      const rect = el?.getBoundingClientRect()
+      const width = rect?.width || window.innerWidth
+      const height = rect?.height || 600
+
+      if (isResponsive) {
+        // SVG Metaballs Logic
+        blobsRef.current.forEach((blob, i) => {
+          const circleEl = document.getElementById(`blob-${i}`)
+          if (!circleEl) return
+          blob.x += blob.vx
+          blob.y += blob.vy
+          if (blob.x < -50 || blob.x > width + 50) blob.vx *= -1
+          if (blob.y < -50 || blob.y > height + 50) blob.vy *= -1
+          blob.x += Math.sin(Date.now() * 0.0005 + i) * 0.4
+          blob.y += Math.cos(Date.now() * 0.0005 + i) * 0.4
+          circleEl.setAttribute('cx', blob.x)
+          circleEl.setAttribute('cy', blob.y)
+          circleEl.setAttribute('r', blob.r)
         })
-        .reverse()
-        .join(',')
-      setMaskStyle(gradients)
+        if (!isInsideHero) setIsInsideHero(true)
+      } else {
+        // Desktop Cursor Trail Logic
+        historyRef.current.unshift({ ...targetRef.current })
+        if (historyRef.current.length > BUBBLE_COUNT) historyRef.current.pop()
+        const gradients = baseSizes
+          .map((size, i) => {
+            const pos = historyRef.current[i] || historyRef.current.at(-1)
+            return `radial-gradient(circle ${size / 2}px at ${pos.x}px ${pos.y}px, black 100%, transparent 100%)`
+          })
+          .reverse()
+          .join(',')
+        setMaskStyle(gradients)
+      }
       rafId = requestAnimationFrame(animate)
     }
     rafId = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafId)
-  }, [])
+  }, [isResponsive, isInsideHero])
 
   const handleHeroMove = (e) => {
     const rect = heroRef.current?.getBoundingClientRect()
@@ -281,6 +332,110 @@ export default function News() {
   const [filterRef, filterVisible] = useReveal(0.1)
   const [featuredRef, featuredVisible] = useReveal(0.1)
 
+  if (selectedArticle) {
+    return (
+      <div className="min-h-screen bg-[#F7F7F5] overflow-x-hidden pt-24">
+        <div className="fixed top-0 left-0 w-full z-[200]">
+          <Navbar scrollY={scrollY} />
+        </div>
+        
+        {/* Back button */}
+        <div className="px-8 md:px-20 mb-8 max-w-5xl mx-auto pt-8">
+          <button 
+            onClick={() => setSelectedArticle(null)} 
+            className="flex items-center gap-2 text-[#745893] hover:text-[#5d3e78] transition-colors font-semibold uppercase tracking-widest text-sm group"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:-translate-x-1 rotate-180">
+               <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Back to News
+          </button>
+        </div>
+
+        {/* Hero Image */}
+        <div className="px-8 md:px-20 mb-12 max-w-5xl mx-auto">
+          <div className="relative w-full h-[50vh] md:h-[60vh] rounded-sm overflow-hidden shadow-2xl group animate-fade-up">
+            <img 
+              src={selectedArticle.img} 
+              alt={selectedArticle.title} 
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 p-8 md:p-14 w-full">
+              <span className="inline-block bg-[#FFF200] text-[#745893] text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-4">
+                {selectedArticle.category}
+              </span>
+              <h1 className="text-[#F7F7F5] text-[clamp(2.5rem,5vw,4rem)] leading-[0.92] uppercase mb-2">
+                {selectedArticle.title}
+              </h1>
+              <p className="text-[#F7F7F5]/80 text-lg tracking-widest uppercase">{selectedArticle.date}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="px-8 md:px-20 max-w-4xl mx-auto mb-20 animate-fade-up" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
+          <h2 className="text-[#745893] text-2xl md:text-3xl font-medium mb-8 leading-tight">
+            {selectedArticle.subtitle}
+          </h2>
+          
+          <div className="prose prose-lg text-[#333]/80 leading-relaxed max-w-none">
+            <p className="mb-6 text-xl leading-relaxed text-[#333]/90">{selectedArticle.content}</p>
+            
+            <h3 className="text-[#745893] text-2xl mb-4 mt-8">Understanding the Condition</h3>
+            <p className="mb-6">
+              When dealing with this condition, it is critical to understand the underlying mechanics that lead to discomfort. Our evidence-based approach ensures that we not only address the symptoms but also the root cause. This involves a comprehensive assessment of your movement patterns, strength, and flexibility. 
+            </p>
+            
+            <div className="bg-[#745893]/5 p-8 rounded-sm border-l-4 border-[#745893] mb-8 mt-8">
+              <p className="text-xl font-medium text-[#745893] italic">
+                "Healing is a matter of time, but it is sometimes also a matter of opportunity. Our physiotherapy approach focuses on unlocking your body's natural healing potential."
+              </p>
+            </div>
+            
+            <h3 className="text-[#745893] text-2xl mb-4 mt-8">Our Treatment Approach</h3>
+            <p className="mb-6">
+              Treatment plans are highly individualized. We may utilize a combination of manual therapy, targeted therapeutic exercises, dry needling, and modalities such as ultrasound or electrical stimulation. The goal is always to restore function, improve mobility, and enhance your overall quality of life.
+            </p>
+            
+            <p className="mb-6">
+              Consistency is key. While in-clinic sessions are essential, we also emphasize the importance of home exercise programs. By actively participating in your recovery process outside the clinic, you significantly improve your long-term outcomes and reduce the risk of recurrence.
+            </p>
+          </div>
+          
+          {/* Share or CTA within article */}
+          <div className="mt-16 pt-8 border-t border-[#745893]/20 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <span className="text-[#745893] font-medium tracking-widest text-sm uppercase">Share:</span>
+              <div className="flex gap-3">
+                <button className="w-10 h-10 rounded-full bg-[#745893]/10 flex items-center justify-center text-[#745893] hover:bg-[#745893] hover:text-white transition-colors">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                </button>
+              </div>
+            </div>
+            <Link to="/appointment" className="bg-[#FFF200] text-[#745893] px-8 py-3 rounded-full font-medium text-sm transition-all hover:scale-105 shadow-md flex items-center gap-2 group">
+              Book a Consultation
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
+                 <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+        
+        {/* Newsletter CTA */}
+        <NewsletterSection />
+        <Footer />
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-up { animation: fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) forwards; }
+        `}</style>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[#F7F7F5] overflow-x-hidden">
       {/* Ticker animation */}
@@ -311,9 +466,27 @@ export default function News() {
       `}</style>
 
       {/* ── FIXED NAVBAR ───────────────────────────────────────────────────── */}
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="fixed top-0 left-0 w-full z-200">
         <Navbar scrollY={scrollY} />
       </div>
+
+      {/* Hidden SVG for Metaball Filter/Mask */}
+      <svg style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none' }}>
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -10" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+          <mask id="hero-mask" maskContentUnits="userSpaceOnUse">
+            <g filter="url(#goo)">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <circle key={i} id={`blob-${i}`} r="80" fill="white" />
+              ))}
+            </g>
+          </mask>
+        </defs>
+      </svg>
 
       {/* ── HERO SECTION ───────────────────────────────────────────────────── */}
       <section
@@ -321,7 +494,7 @@ export default function News() {
         onPointerMove={handleHeroMove}
         onPointerEnter={handleHeroEnter}
         onPointerLeave={handleHeroLeave}
-        className="relative h-[75vh] w-full overflow-hidden bg-[#745893] pt-16 cursor-none"
+        className="relative h-[75vh] w-full overflow-hidden bg-[#745893] pt-16 md:cursor-none"
       >
         {/* Bottom layer — yellow headline */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10">
@@ -334,10 +507,10 @@ export default function News() {
           </div>
 
           <h1
-            className="font-['Compacta'] text-[#FFF200] text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
+            className="md:font-['Compacta'] text-[#F7F7F5] text-[clamp(2rem,8vw,5rem)] md:text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
           >
-            News &<br />Insights
+            News And<br />Insights
           </h1>
 
           
@@ -350,10 +523,12 @@ export default function News() {
           className="pointer-events-none absolute inset-0 z-20"
           style={{
             display: isInsideHero ? 'block' : 'none',
-            WebkitMaskImage: maskStyle,
-            maskImage: maskStyle,
+            WebkitMaskImage: isResponsive ? 'url(#hero-mask)' : maskStyle,
+            maskImage: isResponsive ? 'url(#hero-mask)' : maskStyle,
             WebkitMaskRepeat: 'no-repeat',
             maskRepeat: 'no-repeat',
+            WebkitMaskSize: isResponsive ? '100% 100%' : 'auto',
+            maskSize: isResponsive ? '100% 100%' : 'auto',
           }}
         >
           <img
@@ -372,10 +547,10 @@ export default function News() {
           </div>
 
           <h1
-            className="font-['Compacta'] text-[#F7F7F5] text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
+            className="md:font-['Compacta'] text-[#FFF200] text-[clamp(2rem,8vw,5rem)] md:text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
           >
-            News &<br />Insights
+            News And<br />Insights
           </h1>
           </div>
         </div>
@@ -406,6 +581,7 @@ export default function News() {
 
         {/* Featured card */}
         <div
+          onClick={() => setSelectedArticle(featured)}
           className="group relative grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-sm shadow-2xl min-h-[60vh] cursor-pointer"
           style={{
             opacity: featuredVisible ? 1 : 0,
@@ -442,14 +618,14 @@ export default function News() {
                 {featured.content}
               </p>
 
-              <Link to="/appointment" className="flex items-center gap-3 bg-[#FFF200] text-[#745893] px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-white transition-all w-50 duration-300 hover:scale-105 shadow-lg group/btn">
+              <button onClick={(e) => { e.stopPropagation(); setSelectedArticle(featured); }} className="flex items-center w-max gap-3 bg-[#FFF200] text-[#745893] px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-white transition-all duration-300 hover:scale-105 shadow-lg group/btn">
                 Read Full Article
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   className="transition-transform group-hover/btn:translate-x-1">
                   <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -485,7 +661,7 @@ export default function News() {
         {filtered.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((article, i) => (
-              <ArticleCard key={article.id} article={article} index={i} />
+              <ArticleCard key={article.id} article={article} index={i} onClick={() => setSelectedArticle(article)} />
             ))}
           </div>
         ) : (
@@ -514,12 +690,12 @@ export default function News() {
 function NewsletterSection() {
   const [ref, visible] = useReveal(0.15)
   return (
-    <section className="relative w-full h-[50vh] min-h-[400px] overflow-hidden">
+    <section className="relative w-full h-[40vh] md:h-[50vh] min-h-[350px] md:min-h-[400px] overflow-hidden">
         {/* Background Image with Blur */}
         <div className="absolute inset-0">
-            <img 
-                src={CtaBgImg} 
-                alt="CTA Background" 
+            <img
+                src={CtaBgImg}
+                alt="CTA Background"
                 className="w-full h-full object-cover blur-[4px] scale-105"
             />
             <div className="absolute inset-0 bg-[#745893]/55"></div>
@@ -527,11 +703,11 @@ function NewsletterSection() {
 
         {/* Content */}
         <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-            <h2 className="text-white text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                Start Your Journey to <br /> Pain-Free Mobility Today!
+            <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
+                Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
             </h2>
 
-            <Link to="/appointment" className="bg-white text-[#745893] px-10 py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
+            <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
                 Book An Appointment
                 <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                     <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

@@ -1,11 +1,37 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../index.css';
-import landingBg from '../assets/home/landingBg.jpg';
+import vid1 from '../assets/videos/6023241-uhd_3840_2160_25fps.mp4';
+import vid2 from '../assets/videos/6111019-uhd_3840_2160_25fps.mp4';
+import vid3 from '../assets/videos/8480310-hd_1920_1080_25fps.mp4';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import IMG_3575 from '../assets/home/IMG_3575.JPG';
 import IMG_3651 from '../assets/home/IMG_3651.JPG';
+
+import img1 from "../assets/home/photo_2026-03-27_11-04-18.jpg";
+import img2 from "../assets/home/photo_2026-03-27_11-04-45.jpg";
+import img3 from "../assets/home/photo_2026-04-14_13-29-56.jpg";
+import img4 from "../assets/home/photo_2026-04-14_13-30-05.jpg";
+import img5 from "../assets/home/photo_2026-04-14_13-30-50.jpg";
+import img6 from "../assets/home/photo_2026-04-14_14-23-03.jpg";
+
+import NewsImg1 from '../assets/news/01K8AJ4CXG6T09EWPPD69R0TB51.png';
+import NewsImg2 from '../assets/news/01K8AJ4CXG6T09EWPPD69R0TB52.jpg';
+import NewsImg3 from '../assets/news/01K87YZQNX503SN3TQKZEP7S4W.png';
+import NewsImg4 from '../assets/news/01K87Z1KWNJPC3BN1T6TMQ8YPR1.png';
+import NewsImg5 from '../assets/news/01K87Z1KWNJPC3BN1T6TMQ8YPR2.png';
+import NewsImg6 from '../assets/news/01K87Z55XY4P3JZJD9ZS34C9ZX1.png';
+
+import boleImg from '../assets/contact/Bole.jpg';
+import kiloImg from '../assets/contact/4Kilo.jpg';
+import kebenaImg from '../assets/contact/Kebena.jpg';
+import lebuImg from '../assets/contact/Lebu.jpg';
+import summitImg from '../assets/contact/Summit.jpg';
+
+import { User } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+const bgVideos = [vid1, vid2, vid3];
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,6 +39,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 function Home() {
+  const { t, language } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
   const [showHero, setShowHero] = useState(false);
   const [bgStyles, setBgStyles] = useState({ droga: {}, physio: {} });
@@ -26,8 +53,13 @@ function Home() {
   const servicesRef = useRef(null);
   const scaleX = 1.29;
 
+  const [vidIdx, setVidIdx] = useState(0);
+  const videoRefs = useRef([]);
+  const canvasRef = useRef(document.createElement('canvas'));
+
   const serviceTargetProgress = useRef(0);
   const serviceSmoothProgress = useRef(0);
+  const frameCountRef = useRef(0);
   const [serviceProgress, setServiceProgress] = useState(0);
 
   const sectionRef = useRef(null);
@@ -35,8 +67,11 @@ function Home() {
   const visionTitleRef = useRef(null);
   const contentRef = useRef(null);
 
+  const serviceImages = [img1, img2, img3, img4, img5, img6];
+
   // Initial loading & hero slide
-  useEffect(() => {
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
     const timer1 = setTimeout(() => setIsLoading(false), 400);
     const timer2 = setTimeout(() => {
       updateBgPositions();
@@ -51,11 +86,16 @@ function Home() {
 
   // Update background positions based on element rects
   const updateBgPositions = useCallback(() => {
-    if (!imgDims.current || !drogaRef.current || !physioRef.current) return;
+    if (!drogaRef.current || !physioRef.current) return;
+    const activeVideo = videoRefs.current[vidIdx];
+    if (!activeVideo || activeVideo.readyState < 2) return;
+
+    const iw = activeVideo.videoWidth;
+    const ih = activeVideo.videoHeight;
+    imgDims.current = { w: iw, h: ih };
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const { w: iw, h: ih } = imgDims.current;
 
     const ratio = Math.max(vw / iw, vh / ih);
     const bgW = iw * ratio;
@@ -66,6 +106,22 @@ function Home() {
 
     const drogaRect = drogaRef.current.getBoundingClientRect();
     const physioRect = physioRef.current.getBoundingClientRect();
+
+    // Render video to canvas for text background clipping
+    if (window.scrollY <= window.innerHeight * 1.5) {
+      frameCountRef.current += 1;
+      if (frameCountRef.current % 4 === 0) {
+        const canvas = canvasRef.current;
+        if (canvas.width !== 640) {
+          canvas.width = 640;
+          canvas.height = (640 / iw) * ih;
+        }
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(activeVideo, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.15);
+        document.documentElement.style.setProperty('--dynamic-text-bg', `url(${dataUrl})`);
+      }
+    }
 
     setBgStyles({
       droga: {
@@ -79,17 +135,15 @@ function Home() {
           }px`,
       },
     });
-  }, []);
+  }, [vidIdx]);
 
-  // Load image and store natural dimensions
+  // Video initialization handling
   useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      imgDims.current = { w: img.naturalWidth, h: img.naturalHeight };
-      updateBgPositions();
-    };
-    img.src = landingBg;
-  }, [updateBgPositions]);
+    const activeVideo = videoRefs.current[vidIdx];
+    if (activeVideo) {
+      activeVideo.play().catch(() => { });
+    }
+  }, [vidIdx]);
 
   // Continuous updates during hero slide
   useEffect(() => {
@@ -137,12 +191,13 @@ function Home() {
       }
     };
 
+    let progressRafId;
     const animateProgress = () => {
       serviceSmoothProgress.current +=
         (serviceTargetProgress.current - serviceSmoothProgress.current) * 0.08;
 
       setServiceProgress(serviceSmoothProgress.current);
-      requestAnimationFrame(animateProgress);
+      progressRafId = requestAnimationFrame(animateProgress);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -152,6 +207,7 @@ function Home() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(rafId);
+      cancelAnimationFrame(progressRafId);
     };
   }, []);
 
@@ -173,7 +229,7 @@ function Home() {
     backgroundImage: `linear-gradient(
       rgba(247, 247, 245, 0.15),
       rgba(247, 247, 245, 0.15)
-    ), url(${landingBg})`,
+    ), var(--dynamic-text-bg, none)`,
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     color: 'transparent',
@@ -182,26 +238,28 @@ function Home() {
 
   // TitleLine component
   const TitleLine = ({ text, refEl, bgStyle }) => (
-    <div className="relative inline-block">
+    <div className="relative w-full">
       <span
         aria-hidden="true"
-        className="absolute left-0 top-0 block font-['Compacta'] text-[15vw] leading-[0.95] origin-left blur-[0.5px]"
+        className="absolute left-0 top-0 block font-compacta text-[17cqi] leading-[0.9] origin-left blur-[0.5px]"
         style={{
           ...textBaseStyle,
           ...bgStyle,
           opacity: 0.9,
           transform: `scaleX(${scaleX})`,
+          whiteSpace: 'nowrap'
         }}
       >
         {text}
       </span>
       <span
         ref={refEl}
-        className="relative block font-['Compacta'] text-[15vw] leading-[0.95] origin-left"
+        className="relative block font-compacta text-[17cqi] leading-[0.9] origin-left"
         style={{
           color: 'rgba(247, 247, 245, 0.78)',
           WebkitTextFillColor: 'rgba(247, 247, 245, 0.78)',
           transform: `scaleX(${scaleX})`,
+          whiteSpace: 'nowrap'
         }}
       >
         {text}
@@ -224,26 +282,13 @@ function Home() {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const testimonials = [
-    {
-      name: "Ermiyas T.",
-      role: "PATIENT",
-      quote: "Droga Physiotherapy Clinic gave me my life back. I came in with severe lower-back pain that had been affecting my work and sleep for months. The therapists took time to understand my condition, created a personalized treatment plan, and guided me through every step. After a few sessions, the improvement was unbelievable. I can now move freely and pain-free. Highly recommended!",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800", // Placeholder for the image in your reference
-    },
-    {
-      name: "Aster B.",
-      role: "PATIENT",
-      quote: "I am very impressed with the professionalism and care at Droga Physiotherapy Clinic. The team is friendly, knowledgeable, and truly dedicated to patient recovery. Their modern equipment and clean environment made every visit comfortable. I felt supported from my first consultation to my final session. This clinic is definitely the best choice for physiotherapy.",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-      name: "Semira Mukhtar",
-      role: "PATIENT",
-      quote: "As an athlete, I needed a physiotherapy clinic that understood sports injuries — and Droga Physiotherapy Clinic exceeded my expectations. They helped me recover from a knee injury and guided me through strengthening exercises that improved my performance. I’m now back on the field stronger than ever. Thank you to the entire Droga team for their outstanding care!",
-      image: "https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=686&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+  const testimonials = t.testimonials.map((item, idx) => ({
+    ...item,
+    image: [
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800",
+    ][idx]
+  }));
 
   const handleNext = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -291,122 +336,14 @@ function Home() {
   // add near your other useState hooks
   const [activeBranchIndex, setActiveBranchIndex] = useState(1);
 
-  const branches = [
-    {
-      name: "Bole Branch",
-      description: "focus on the bone therapy",
-      phone: "+251965757523",
-      address: "Bole Next to Japan Embassy",
-      hours: "Monday - Saturday:\n08:00 - 09:00",
-      services: [
-        "Mobility & Movement Restoration",
-        "Specialized Programs",
-        "Strength & Conditioning",
-        "Neurological Rehabilitation",
-        "Injury Rehabilitation",
-        "Pain Management & Relief",
-      ],
-    },
-    {
-      name: "4-Kilo Branch",
-      description:
-        "Arat kilo branch is our second branch opened at 2022 GC. This branch constitutes Senior health professionals and Experts at the field.",
-      phone: "+251965757526",
-      address: "4-Kilo Besides Tourist hotel at Nib bank building.",
-      hours: "Monday-Saturday:\n08:00 - 09:00",
-      services: [
-        "Pain Management & Relief",
-        "Injury Rehabilitation",
-        "Neurological Rehabilitation",
-        "Strength & Conditioning",
-        "Specialized Programs",
-        "Mobility & Movement Restoration",
-      ],
-    },
-    {
-      name: "Kebena Branch (Pediatric)",
-      description: "Droga Pediatric physiotherapy center",
-      phone: "+251940332122",
-      address:
-        "Bel Air Kebena (From Addis view hotel 200 meters by the road leading to the palace)",
-      hours: "Monday - Saturday:\n08:00 - 09:00\nThis Branch is Only for Childern.",
-      services: [
-        "Gross Motor Skills Development",
-        "Neurodevelopmental Support",
-        "Rehabilitation & Injury Care",
-        "Fine Motor & School Skills",
-        "Activities of Daily Living (ADLs)",
-        "Regulation & Behavior",
-      ],
-    },
-    {
-      name: "Lebu Branch",
-      description:
-        "Our Lebu branch is our Third adult physiotherapy branch opened at 2024 GC. This branch constitutes Senior health professionals and Experts at the field",
-      phone: "+251935999777",
-      address: "Lebu Varnero Infront of Chanoly Noodles",
-      hours: "Monday - Saturday:\n08:00 - 09:00",
-      services: [
-        "Mobility & Movement Restoration",
-        "Specialized Programs",
-        "Strength & Conditioning",
-        "Neurological Rehabilitation",
-        "Injury Rehabilitation",
-        "Pain Management & Relief",
-      ],
-    },
-    {
-      name: "Summit Branch",
-      description:
-        "Our Summit branch is our fifth adult physiotherapy branch opened at 2026 GC. This branch constitutes Senior health professionals and Experts at the field.",
-      phone: "0912414697",
-      address: "Summit Around 72",
-      hours: "Monday - Saturday:",
-      services: [],
-      unavailable: true,
-    },
-  ];
+  const branches = t.branches;
 
   const activeBranch = branches[activeBranchIndex];
 
-  const newsData = [
-    {
-      title: "ከቀዶ ጥገና በኋላ \n የማገገሚያ ምክሮች",
-      content: "ከቀዶ ጥገና ማገገም ፈታኝ ሊሆን ይችላል...",
-      date: "2025-10-24",
-      img: "src/assets/news/01K8AJ4CXG6T09EWPPD69R0TB51.png",
-    },
-    {
-      title: "የልጆች ህክምና \n ጥቅሞች",
-      content: "የሕፃናት ሕክምና ልጆች ሙሉ አቅማቸውን...",
-      date: "2025-10-23",
-      img: "src/assets/news/01K8AJ4CXG6T09EWPPD69R0TB52.jpg",
-    },
-    {
-      title: "Geriatric Therapy",
-      content: "Aging doesn’t mean slowing down...",
-      date: "2025-10-23",
-      img: "src/assets/news/01K87YZQNX503SN3TQKZEP7S4W.png",
-    },
-    {
-      title: "Sports Injury Recovery",
-      content: "Recover faster and stronger with guided therapy...",
-      date: "2025-10-22",
-      img: "src/assets/news/01K87Z1KWNJPC3BN1T6TMQ8YPR1.png",
-    },
-    {
-      title: "Back Pain Relief Tips",
-      content: "Simple exercises to reduce chronic back pain...",
-      date: "2025-10-21",
-      img: "src/assets/news/01K87Z1KWNJPC3BN1T6TMQ8YPR2.png",
-    },
-    {
-      title: "Posture Correction",
-      content: "Improve your posture and avoid long-term damage...",
-      date: "2025-10-20",
-      img: "src/assets/news/01K87Z55XY4P3JZJD9ZS34C9ZX1.png",
-    },
-  ];
+  const newsData = t.news.map((item, idx) => ({
+    ...item,
+    img: [NewsImg1, NewsImg2, NewsImg3, NewsImg4, NewsImg5, NewsImg6][idx]
+  }));
 
   const bufferedNews = [...newsData.slice(-3), ...newsData, ...newsData.slice(0, 3)];
   const [currentIndex, setCurrentIndex] = useState(3);
@@ -435,9 +372,13 @@ function Home() {
   useEffect(() => {
     if (sliderTrackRef.current) {
       isTransitioning.current = true;
-      const cardWidth = sliderTrackRef.current.children[0].offsetWidth + 40; // width + gap
 
-      gsap.to(sliderTrackRef.current, {
+      const track = sliderTrackRef.current;
+      // Dynamically calculate the gap applied by CSS classes (gap-4 vs gap-10)
+      const computedGap = parseFloat(window.getComputedStyle(track).gap) || 0;
+      const cardWidth = track.children[0].offsetWidth + computedGap;
+
+      gsap.to(track, {
         x: -currentIndex * cardWidth,
         duration: 0.8,
         ease: "power3.inOut",
@@ -446,10 +387,10 @@ function Home() {
 
           // Infinite Loop Reset
           if (currentIndex >= newsData.length + 3) {
-            gsap.set(sliderTrackRef.current, { x: -3 * cardWidth });
+            gsap.set(track, { x: -3 * cardWidth });
             setCurrentIndex(3);
           } else if (currentIndex <= 0) {
-            gsap.set(sliderTrackRef.current, { x: -newsData.length * cardWidth });
+            gsap.set(track, { x: -newsData.length * cardWidth });
             setCurrentIndex(newsData.length);
           }
         }
@@ -466,58 +407,83 @@ function Home() {
       />
 
       {/* Fixed Navbar */}
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="fixed top-0 left-0 w-full z-200">
         <Navbar scrollY={scrollY} />
       </div>
 
       {/* Hero section */}
       <div
-        className="absolute left-0 top-0 z-40 flex h-[75vh] w-full flex-col justify-end bg-[#745893] pb-16"
+        className="absolute left-0 top-0 z-40 flex h-[75vh] w-full flex-col justify-end bg-[#745893] pb-24 md:pb-16"
         style={{
           transform: heroTransform,
           transition: scrollY === 0 ? 'transform 0.7s ease-out' : 'none',
         }}
       >
-        <div className="px-24 -mb-12">
-          <div className="relative inline-flex flex-col items-start w-fit">
-            <TitleLine text="DROGA" refEl={drogaRef} bgStyle={bgStyles.droga} />
+        {/* Desktop title block */}
+        <div className="hidden md:block px-6 md:px-12 lg:px-24 mb-4 lg:-mb-12 w-full" style={{ containerType: 'inline-size' }}>
+          <div className="relative flex flex-col items-start w-full">
+            <TitleLine text={t.hero.title1} refEl={drogaRef} bgStyle={bgStyles.droga} />
 
             {/* Extra text positioned above PHYSIOTHERAPY on the right */}
             <span
-              className="font-semibold text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white uppercase drop-shadow-md absolute right-0 bottom-[55%] z-10 translate-y-[20%] translate-x-[80%]"
+              className="font-semibold scale-x-100 text-sm md:text-lg lg:text-xl xl:text-xl text-[#FFF200] absolute right-0 bottom-[55%] z-10 translate-y-[20%] tracking-wide"
               style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
             >
-              PAIN FREE MOBILITY!
+              "{t.hero.tagline}"
             </span>
 
             <TitleLine
-              text="PHYSIOTHERAPY"
+              text={t.hero.title2}
               refEl={physioRef}
               bgStyle={bgStyles.physio}
             />
           </div>
         </div>
 
+        {/* Mobile title block — centered */}
+        <div className="flex md:hidden flex-col items-center w-full px-6 mb-14">
+          {/* Centered DROGA & PHYSIOTHERAPY on mobile — scaleX expands left+right from center */}
+          <div style={{ transform: `scaleX(${scaleX})`, transformOrigin: 'center' }} className="relative">
+            <span className="block font-compacta text-[15vw] leading-[0.95] text-center text-[rgba(247,247,245,0.78)]">
+              {t.hero.title1}
+            </span>
 
+            <span className="block font-compacta text-[15vw] leading-[0.95] text-center text-[rgba(247,247,245,0.78)]">
+              {t.hero.title2}
+            </span>
+          </div>
 
-        <p className="absolute left-[8%] xl:left-[12%] top-[82vh] text-[#F7F7F5] capitalize font-semibold text-base md:text-2xl max-w-sm xl:max-w-2xl">
-          DROGA Physiotherapy is the biggest physiotherapy clinic in Ethiopia.
+          {/* Taglines */}
+          <div className="flex flex-col items-center mt-6 gap-2 w-full text-center">
+            <span className="font-medium text-xl text-[#FFF200] drop-shadow-md">
+              "{t.hero.tagline}"
+            </span>
+
+            <p className="text-[#F7F7F5] text-base max-w-[85vw] leading-snug mt-1 opacity-90 font-light">
+              {t.hero.description}
+            </p>
+          </div>
+        </div>
+
+        {/* Description paragraph — desktop only (positioned strictly against the left grid) */}
+        <p className="hidden md:block absolute left-6 md:left-12 lg:left-24 top-[82vh] text-[#F7F7F5] capitalize font-medium text-sm md:text-lg lg:text-xl xl:text-2xl max-w-[280px] lg:max-w-lg xl:max-w-2xl tracking-wide">
+          {t.hero.description}
         </p>
 
-        {/* Special offer box */}
-        <div className="absolute right-[3%] xl:right-[10%] top-[70vh] w-full md:w-auto max-w-[290px] md:max-w-[310px] bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 md:p-6 opacity-90 border border-white/20 transition-all hover:shadow-xl origin-top-right">
+        {/* Special offer box — desktop: pinned flush right | mobile: absolute overlapping bottom edge */}
+        <div className="absolute left-1/2 md:left-auto right-auto md:right-12 lg:right-24 bottom-0 md:bottom-auto md:top-[67vh] -translate-x-1/2 md:translate-x-0 translate-y-[45%] md:translate-y-0 w-[80%] max-w-[320px] lg:w-[310px] bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-4 lg:p-6 opacity-90 border border-white/20 transition-all hover:shadow-xl scale-100 origin-bottom-right md:origin-top-right">
           <div className="text-center md:text-left">
             <h3 className="text-[#755893] font-bold text-sm uppercase tracking-wider">
-              SPECIAL OFFER
+              {t.specialOffer.title}
             </h3>
-            <div className="text-3xl md:text-4xl font-black text-[#745893] my-1.5">
-              15% OFF
+            <div className="text-3xl md:text-4xl font-black text-[#745893] my-1">
+              {t.specialOffer.discount}
             </div>
             <p className="text-[#745893] text-xs md:text-sm mt-1 leading-relaxed">
-              Your first consultation session. Limited slots available this month.
+              {t.specialOffer.description}
             </p>
             <Link to="/appointment" className="mt-4 w-full bg-[#FFF200] hover:bg-[#5d3e78] text-[#333] hover:text-[#F7F7F5] font-semibold py-2.5 px-4 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-sm text-sm">
-              Book An Appointment
+              {t.specialOffer.button}
               <svg
                 className="w-4 h-4 transition-colors duration-300 group-hover:text-[#F7F7F5]"
                 viewBox="0 0 20 20"
@@ -536,61 +502,73 @@ function Home() {
         </div>
       </div>
 
-      {/* Background image with transform */}
+      {/* Background videos with transform */}
       <div
-        className="fixed top-0 left-0 h-screen w-full bg-center bg-cover bg-no-repeat z-0"
+        className="fixed top-0 left-0 h-screen w-full z-0 overflow-hidden"
         style={{
-          backgroundImage: `url(${landingBg})`,
           transform: bgTransform,
           transition: 'transform 1.2s cubic-bezier(0.22, 1, 0.36, 1)',
-          filter: 'brightness(0.75)',
+          filter: 'brightness(0.5)',
         }}
-      />
+      >
+        {bgVideos.map((vid, idx) => (
+          <video
+            key={vid}
+            ref={(el) => (videoRefs.current[idx] = el)}
+            src={vid}
+            playsInline
+            muted
+            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${vidIdx === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            onEnded={() => setVidIdx((prev) => (prev + 1) % bgVideos.length)}
+          />
+        ))}
+      </div>
 
       {/* About Us Panel (Fixed alongside background image) */}
       <div
-        className="fixed px-24 h-[60vh] top-[20vh] w-1/2 flex flex-col justify-center gap-5 z-0"
+        className="fixed px-6 md:px-24 h-auto md:h-[60vh] top-[15vh] md:top-[20vh] w-full md:w-1/2 flex flex-col justify-center gap-4 md:gap-5 z-0 transition-opacity"
         style={{
           left: redLeft,
           transition: 'left 1s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
-        <div className="flex items-center gap-4">
-          <div className="flex items-center">
-            <div className="h-[1.25px] bg-[#745893] w-50"></div>
-            <div className="w-2 h-2 bg-[#745893] rotate-45 -mr-1"></div>
+        <div className="flex flex-col justify-center gap-3 md:gap-5 bg-white/45 md:bg-transparent backdrop-blur-md md:backdrop-blur-none p-5 sm:p-6 md:p-0 rounded-xl md:rounded-none md:shadow-none border border-white/45 md:border-transparent mt-[8vh] md:mt-0 max-w-full md:max-w-none">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center">
+              <div className="h-[2px] bg-[#745893] w-50 md:w-50"></div>
+              <div className="w-2 h-2 bg-[#745893] rotate-45 -mr-1"></div>
+            </div>
+
+            <span className="text-sm md:text-lg font-medium tracking-widest uppercase text-[#333]">{t.about.subtitle}</span>
           </div>
 
-          <span className="text-lg font-semibold tracking-widest uppercase text-[#333]">ABOUT US</span>
-        </div>
+          <div className={"text-[#745893] text-[7.5vw] md:text-[2.9vw] leading-[1.15] md:leading-[1.2] uppercase font-[700] md:font-semibold drop-shadow-sm md:drop-shadow-none tracking-wide whitespace-pre-line max-w-full md:max-w-lg" + (language === 'amh' ? ' font-compacta' : '')}>
+            {t.about.title}
+          </div>
 
-        <div className="text-[#745893] text-[3vw] leading-[1.2] uppercase">
-          DROGA PHYSIOTHERAPY SPECIALITY CLINIC
-        </div>
+          <div className="w-full text-xs sm:text-sm md:text-md leading-relaxed font-light md:font-regular max-w-full md:max-w-sm text-[#444] md:text-[#333] pt-1 md:pt-0">
+            {t.about.description}
+          </div>
 
-        <div className="w-110 text-md leading-relaxed font-light max-w-lg text-[#333]">
-          Droga Physiotherapy Specialty Clinic was established in 2015 in Addis Ababa by a group
-          of health care professionals, who have an interest in developing the scientific background
-          of physiotherapy in Ethiopia.
-        </div>
-
-        <div>
-          <Link to="/about" className="flex items-center gap-3 border border-[#745893] px-6 py-3 rounded-full bg-[#745893] text-white hover:text-[#FFF200] transition-all duration-300 w-fit">
-            View More
-            <svg
-              className="w-5 h-5 transition-colors duration-300 group-hover:text-[#FFF200]"
-              viewBox="0 0 20 20"
-              fill="none"
-            >
-              <path
-                d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
+          <div className="mt-3 md:mt-0">
+            <Link to="/about" className="group flex items-center gap-3 px-5 md:px-6 py-2.5 md:py-3 rounded-full bg-[#FFF200] text-black hover:bg-[#745893] hover:text-white transition-all duration-300 w-fit shadow-md hover:shadow-lg hover:-translate-y-0.5">
+              <span className="text-sm md:text-base font-semibold">{t.about.button}</span>
+              <svg
+                className="w-4 h-4 md:w-5 md:h-5 transition-colors duration-300 group-hover:text-white"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -599,97 +577,96 @@ function Home() {
         {/* Massive transparent spacer */}
         <div className="h-[230vh] w-full" />
 
-        {/* HORIZONTAL SCROLLING SERVICES CONTAINER */}
-        <div ref={servicesRef} className="w-full h-[300vh] relative z-20 pointer-events-auto">
-          <div className="w-full h-screen sticky top-0 bg-[#745893] overflow-hidden flex flex-col justify-between px-24 py-16">
+        {/* HORIZONTAL SCROLLING SERVICES CONTAINER — unified (desktop + mobile) */}
+        <div ref={servicesRef} className="w-full h-[500vh] relative z-20 pointer-events-auto">
+          <div className="w-full h-screen sticky top-0 bg-[#745893] overflow-hidden flex flex-col justify-between py-6 md:py-16 px-0 md:px-24">
 
-            {/* Horizontal Sliding Filmstrip */}
+            {/* ── DESKTOP filmstrip ── */}
             <div
-              className="absolute top-25 left-30 h-[65vh] w-[300vw] flex"
-              style={{ transform: `translateX(-${serviceProgress * 220}vw)` }}
+              className="hidden md:flex absolute top-25 left-30 h-[65vh]"
+              style={{
+                width: `${t.services.length * 100}vw`,
+                transform: `translateX(-${serviceProgress * (t.services.length - 1) * 103}vw)`
+              }}
             >
-              {/* SLIDE 1 */}
-              <div className="w-screen px-24 flex justify-between items-start relative h-full">
-                <div className="flex flex-col z-20">
-                  <div className="text-white text-xl tracking-widest uppercase font-light mb-4">SERVICE 01</div>
-                  <div className="flex flex-col gap-[0.1em] text-[#FFF200] text-[5vw] leading-[1] opacity-95 drop-shadow-lg">
-                    <span>Regulation And</span>
-                    <span>Behavior</span>
+              {t.services.map((service, idx) => (
+                <div key={idx} className="w-screen px-24 flex justify-between items-start relative h-full">
+                  <div className="flex flex-col z-20">
+                    <div className="text-[#FFF200] text-xl tracking-widest uppercase font-light mb-4">
+                      {language === 'amh' ? 'አገልግሎት' : 'SERVICE'} {service.id}
+                    </div>
+                    <div className={"flex flex-col gap-[0.1em] text-[#FFF200] text-[4vw] leading-[1] opacity-95 drop-shadow-lg max-w-lg tracking-wide" + (language === 'amh' ? ' font-compacta' : '')}>
+                      {(service.title.includes('\n') ? service.title.split('\n') : service.title.split(' ')).map((word, i) => (
+                        <span key={i}>{word.trim()}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div
+                    className={`absolute left-[28%] top-0 w-[45%] h-full bg-cover bg-center shadow-2xl z-10`}
+                    style={{
+                      backgroundImage: `url(${serviceImages[idx]})`
+                    }}
+                  />
+                  <div className="w-[25%] max-w-sm h-full flex items-end z-20 pl-12">
+                    <p className="text-white text-sm tracking-wider leading-relaxed font-light">
+                      {service.description}
+                    </p>
                   </div>
                 </div>
-                <div className="absolute left-[28%] top-0 w-[45%] h-full bg-[url('./assets/home/photo_2026-03-27_11-04-18.jpg')] bg-cover bg-center shadow-2xl z-10" />
-                <div className="w-[25%] max-w-sm h-full flex items-end z-20 pl-12">
-                  <p className="text-white text-sm leading-relaxed font-light">
-                    Emotional Regulation: Teaching children to identify feelings and use calming strategies effectively. Focus & Attention: Increasing engagement and task completion, especially for children with ADHD.
-                  </p>
-                </div>
-              </div>
-
-              {/* SLIDE 2 */}
-              <div className="w-screen px-24 flex justify-between items-start relative h-full">
-                <div className="flex flex-col z-20">
-                  <div className="text-white text-xl tracking-widest uppercase font-light mb-4">SERVICE 02</div>
-                  <div className="flex flex-col gap-[0.1em] text-[#FFF200] text-[5vw] leading-[1] opacity-95 drop-shadow-lg">
-                    <span>Activities Of</span>
-                    <span>Daily Living</span>
-                    <span>(ADLs)</span>
-                  </div>
-                </div>
-                <div className="absolute left-[28%] top-0 w-[45%] h-full bg-[url('./assets/home/enh.png')] bg-cover bg-center shadow-2xl z-10" />
-                <div className="w-[25%] max-w-sm h-full flex items-end z-20 pl-12">
-                  <p className="text-white text-sm leading-relaxed font-light">
-                    Self-Care Independence: Building skills for dressing, feeding, and grooming. Organization & Executive Functioning: Strategies to improve planning, task initiation, and time management. Play Skills Development: Encouraging appropriate, imaginative, and interactive play.
-                  </p>
-                </div>
-              </div>
-
-              {/* SLIDE 3 */}
-              <div className="w-screen px-24 flex justify-between items-start relative h-full">
-                <div className="flex flex-col z-20">
-                  <div className="text-white text-xl tracking-widest uppercase font-light mb-4">SERVICE 03</div>
-                  <div className="flex flex-col gap-[0.1em] text-[#FFF200] text-[5vw] leading-[1] opacity-95 drop-shadow-lg">
-                    <span>Fine Motor</span>
-                    <span>And</span>
-                    <span>School Skills</span>
-                  </div>
-                </div>
-                <div className="absolute left-[28%] top-0 w-[45%] h-full bg-[url('./assets/home/photo_2026-03-27_11-04-45.jpg')] bg-cover bg-center shadow-2xl z-10" />
-                <div className="w-[25%] max-w-sm h-full flex items-end z-20 pl-12">
-                  <p className="text-white text-sm leading-relaxed font-light">
-                    Handwriting Improvement: Developing pencil grip, letter formation, and writing endurance. Scissor Skills & Tool Use: Mastering the fine motor control needed for classroom and craft activities. Sensory Processing: Helping children who are over-responsive or under-responsive to sensory input (sounds, textures, movement) to better participate in daily life.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
 
-            {/* Bottom Footer Area (STATIC) */}
-            <div className="w-full relative top-5 mt-auto z-20">
-              {/* Dynamic Progress line */}
-              <div className="w-full h-[2px] bg-white/30 mb-6 relative">
+            {/* ── MOBILE filmstrip ── */}
+            <div
+              className="flex md:hidden absolute inset-x-0 top-0 h-[calc(100vh-80px)]"
+              style={{
+                width: `${t.services.length * 100}vw`,
+                transform: `translateX(-${serviceProgress * (t.services.length - 1) * 100}vw)`
+              }}
+            >
+              {t.services.map((service, idx) => (
+                <div key={idx} className="relative w-screen h-full overflow-hidden">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(${serviceImages[idx]})`
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#745893] via-[#745893]/60 to-[#745893]/10" />
+                  <div className="absolute inset-0 flex flex-col justify-end p-6 z-10 pb-12">
+                    <div className="flex flex-col gap-3">
+                      <div className="text-[#FFF200] text-[3.5vw] tracking-widest uppercase font-semibold">
+                        {language === 'amh' ? 'አገልግሎት' : 'SERVICE'} {service.id}
+                      </div>
+                      <div className="text-[#FFF200] text-[11vw] leading-[1.1] uppercase font-black drop-shadow-lg whitespace-pre-line">
+                        {service.title}
+                      </div>
+                      <p className="text-white/80 text-xs leading-relaxed font-light max-w-[75vw]">
+                        {service.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom footer bar — shared */}
+            <div className="w-full mt-auto z-20 px-6 md:px-0">
+              {/* Progress line */}
+              <div className="w-full h-[2px] bg-white/30 mb-4 relative">
                 <div
                   className="absolute top-0 left-0 h-full w-full bg-[#F7F7F5] origin-left transition-transform duration-150 ease-out"
                   style={{ transform: `scaleX(${Math.max(0.02, serviceProgress)})` }}
                 />
               </div>
-
               <div className="flex justify-between items-center">
-                <div className="text-white text-xl font-light tracking-widest">
-                  [{Math.round(serviceProgress * 2) + 1}/3]
+                <div className="text-white text-base md:text-xl font-light tracking-widest">
+                  [{Math.min(t.services.length, Math.round(serviceProgress * (t.services.length - 1)) + 1)}/{t.services.length}]
                 </div>
-                <Link to="/service" className="flex items-center gap-3 text-[#FFF200] text-xl font-light tracking-wide hover:opacity-80 transition-opacity">
-                  View All Services
-                  <svg
-                    className="w-7 h-7 text-[#FFF200] transition-colors duration-300 -rotate-45 group-hover:text-[#FFF200]"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path
-                      d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                <Link to="/service" className="flex items-center gap-2 md:gap-3 text-[#FFF200] text-sm md:text-xl font-light tracking-wide hover:opacity-80 transition-opacity">
+                  {language === 'amh' ? 'ሁሉንም አገልግሎቶች ይመልከቱ' : 'View All Services'}
+                  <svg className="w-5 h-5 md:w-7 md:h-7 -rotate-45" viewBox="0 0 20 20" fill="none">
+                    <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
               </div>
@@ -697,24 +674,26 @@ function Home() {
           </div>
         </div>
 
-        {/* ========== NEW TESTIMONIAL SECTION ========== */}
-        <section className="relative z-10 bg-[#F7F7F5] min-h-screen py-16 md:py-24 overflow-hidden flex items-center pointer-events-auto">
+        {/* ========== TESTIMONIAL SECTION ========== */}
+        <section className="relative z-10 bg-[#F7F7F5] min-h-screen py-16 md:py-16 overflow-hidden flex items-center pointer-events-auto">
           <div className="mx-auto px-6 md:px-24 flex flex-col items-center">
             {/* Heading */}
-            <h2 className="text-[#745893] text-3xl md:text-4xl lg:text-6xl leading-tight mb-2 text-center">
-              What Our Patients Say
+            <h2 className="text-[#745893] text-2xl md:text-3xl lg:text-5xl leading-tight mb-5 text-center">
+              {language === 'amh' ? 'ታካሚዎቻችን ምን ይላሉ?' : 'What Our Patients Say'}
             </h2>
 
             {/* Subheading */}
             <p className="text-gray-600 text-center text-sm md:text-base max-w-2xl mb-12">
-              Real stories from professionals who transformed their personal brand and editorial authority through our dedicated strategic partnership.
+              {language === 'amh'
+                ? 'በእኛ ቁርጠኝነት እና ሙያዊ አጋርነት የግል ብራንዳቸውን እና የሕክምና ባለሥልጣናቸውን የቀየሩ ባለሙያዎች እውነተኛ ታሪኮች።'
+                : 'Real stories from professionals who transformed their personal brand and editorial authority through our dedicated strategic partnership.'}
             </p>
 
             {/* Main testimonial layout */}
-            <div className="w-full max-w-6xl flex flex-col md:flex-row items-stretch">
+            <div className="w-full max-w-6xl flex flex-col md:flex-row items-stretch gap-8 md:gap-0 mt-4 md:mt-0">
 
-              {/* Left: Blue div */}
-              <div className="relative bottom-3 scale-95 w-full md:w-1/2 h-[350px] md:h-[450px] lg:h-[500px] flex items-center justify-center">
+              {/* Left: Image Stack */}
+              <div className="relative md:bottom-3 scale-100 md:scale-95 w-full md:w-1/2 h-[280px] md:h-[450px] lg:h-[500px] flex items-center justify-center">
                 {testimonials.map((item, index) => {
                   const isFront = index === activeIndex;
                   const isMiddle = index === (activeIndex + 1) % testimonials.length;
@@ -723,46 +702,51 @@ function Home() {
                   return (
                     <div
                       key={index}
-                      className={`absolute inset-0 m-auto w-3/5 h-full rounded-[15px] overflow-hidden transition-all duration-500 ease-in-out border-b-5 border-[#F7F7F5]
+                      className={`absolute inset-0 m-auto w-[85%] md:w-3/5 h-[90%] md:h-full rounded-[15px] overflow-hidden transition-all duration-500 ease-in-out border-b-[4px] md:border-b-5 border-[#F7F7F5]
                   ${isFront ? 'z-30 translate-y-0 scale-100 opacity-100 shadow-xl' : ''}
-                  ${isMiddle ? 'z-20 translate-y-6 scale-[0.98] opacity-100' : ''}
-                  ${isBack ? 'z-10 translate-y-12 scale-[0.95] opacity-100' : 'opacity-0'}
+                  ${isMiddle ? 'z-20 translate-y-4 md:translate-y-8 scale-[0.98] opacity-100' : ''}
+                  ${isBack ? 'z-10 translate-y-8 md:translate-y-16 scale-[0.95] opacity-100' : 'opacity-0'}
                 `}
                       style={{
                         backgroundColor: isFront ? 'transparent' : '#D1C6E0',
                       }}
                     >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className={`w-full h-full object-cover transition-opacity duration-500 ${isFront ? 'opacity-100' : 'opacity-40'
-                          }`}
-                      />
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className={`w-full h-full object-cover transition-opacity duration-500 ${isFront ? 'opacity-100' : 'opacity-40'}`}
+                        />
+                      ) : (
+                        <div className={`w-full h-full flex flex-col items-center justify-center bg-[#D1C6E0] transition-opacity duration-500 ${isFront ? 'opacity-100' : 'opacity-40'}`}>
+                          <User size={250} strokeWidth={1} className="text-[#745893]/70" />
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
 
-              {/* Right: Red div */}
-              <div className="w-full md:w-1/2 h-[350px] md:h-[450px] lg:h-[500px] flex flex-col justify-between text-left p-4 md:p-8 shrink-0">
+              {/* Right: Content Block */}
+              <div className="w-full md:w-1/2 h-auto md:h-[450px] lg:h-[500px] flex flex-col justify-between text-center md:text-left p-2 md:p-8 shrink-0">
                 {/* Top content */}
-                <div className="space-y-6">
-                  <p className="text-[#333] text-lg md:text-xl leading-relaxed font-light italic">
+                <div className="space-y-4 md:space-y-6">
+                  <p className="text-[#333] text-base md:text-xl leading-relaxed md:leading-relaxed font-light italic px-2 md:px-0">
                     "{testimonials[activeIndex].quote}"
                   </p>
 
-                  <div>
-                    <h4 className="text-[#745893] font-bold text-xl">
+                  <div className="pt-2 md:pt-0">
+                    <h4 className="text-[#745893] font-bold text-lg md:text-xl">
                       {testimonials[activeIndex].name}
                     </h4>
-                    <p className="text-gray-400 text-xs tracking-widest uppercase">
+                    <p className="text-gray-400 text-xs tracking-widest uppercase mt-1">
                       {testimonials[activeIndex].role}
                     </p>
                   </div>
                 </div>
 
                 {/* Bottom controls */}
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full mt-6 md:mt-0 px-4 md:px-0 pb-4 md:pb-0">
                   <div className="flex gap-4">
                     <button
                       onClick={handlePrev}
@@ -836,8 +820,9 @@ function Home() {
               <div className='flex flex-col gap-10 md:gap-20 justify-center flex-1'>
                 <div className="relative z-10">
                   <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
-                    “To be Ethiopia’s leading physiotherapy and rehabilitation provider,
-                    transforming lives through excellence in movement and care.”
+                    {language === 'amh'
+                      ? '“በእንቅስቃሴ እና በእንክብካቤ የላቀ ውጤት በማስመዝገብ የሰዎችን ሕይወት የሚቀይር የኢትዮጵያ ቀዳሚ የፊዚዮቴራፒ እና የመልሶ ማቋቋም አገልግሎት አቅራቢ መሆን።”'
+                      : '“To be Ethiopia’s leading physiotherapy and rehabilitation provider, transforming lives through excellence in movement and care.”'}
                   </p>
                 </div>
 
@@ -846,7 +831,7 @@ function Home() {
                     ref={visionTitleRef}
                     className="text-6xl md:text-8xl font-semibold text-[#FFF200] leading-none uppercase select-none opacity-80"
                   >
-                    VISSION
+                    {language === 'amh' ? 'ራዕይ' : 'VISION'}
                   </h2>
                 </div>
               </div>
@@ -866,15 +851,15 @@ function Home() {
                     ref={missionTitleRef}
                     className="text-6xl md:text-8xl font-semibold text-[#FFF200] leading-none uppercase select-none opacity-80"
                   >
-                    MISSION
+                    {language === 'amh' ? 'ተልዕኮ' : 'MISSION'}
                   </h2>
                 </div>
 
                 <div className="relative z-10">
                   <p className="mv-text text-white/90 text-lg max-w-md font-light leading-relaxed mb-4">
-                    “We deliver evidence-based, patient-centered physiotherapy services
-                    that restore function, reduce pain, and enhance quality of life through
-                    skilled professionals and innovative rehabilitation solutions.”
+                    {language === 'amh'
+                      ? '“ተግባርን ወደ ነበረበት የሚመልሱ፣ ህመምን የሚቀንሱ እና የኑሮ ጥራትን የሚያሻሽሉ በማስረጃ ላይ የተመሰረቱ፣ ታካሚን ማዕከል ያደረጉ የፊዚዮቴራፒ አገልግሎቶችን በባለሙያዎች እና በፈጠራ የመልሶ ማቋቋም መፍትሄዎች እንሰጣለን።”'
+                      : '“We deliver evidence-based, patient-centered physiotherapy services that restore function, reduce pain, and enhance quality of life through skilled professionals and innovative rehabilitation solutions.”'}
                   </p>
                 </div>
               </div>
@@ -890,15 +875,17 @@ function Home() {
           <div className="w-full max-w-7xl mx-auto flex flex-col gap-10">
 
             {/* Header */}
-            <div className="flex justify-between items-end">
-              <h2 className="text-[#745893] font-semibold text-2xl md:text-4xl lg:text-5xl uppercase">
-                Droga Physiotherapy Social <br /> Media Posts
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-0">
+              <h2 className="text-[#745893] font-medium text-xl md:text-3xl lg:text-4xl leading-tight">
+                {language === 'amh'
+                  ? <>ድሮጋ ፊዚዮቴራፒ<br className="hidden md:block" /> የማህበራዊ ሚዲያ ልጥፎች</>
+                  : <>Droga Physiotherapy<br className="hidden md:block" /> Social Media Posts</>}
               </h2>
 
-              <Link to="/news" className="bg-[#745893] text-white px-4 py-2.5 rounded-full flex items-center gap-2 hover:bg-[#5d4677] transition shadow-md">
-                View More
+              <Link to="/news" className="bg-[#745893] text-white px-4 md:px-5 py-2 md:py-2.5 rounded-full flex items-center gap-2 hover:bg-[#5d4677] transition shadow-md w-fit text-sm md:text-base">
+                {language === 'amh' ? 'ተጨማሪ ይመልከቱ' : 'View More'}
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 md:w-5 md:h-5"
                   viewBox="0 0 20 20"
                   fill="none"
                 >
@@ -917,49 +904,49 @@ function Home() {
             <div className="relative overflow-hidden -mx-6 md:-mx-0 px-6 md:px-0">
               <div
                 ref={sliderTrackRef}
-                className="flex gap-10 transition-none"
+                className="flex gap-4 md:gap-10 transition-none"
                 style={{ width: 'max-content' }}
               >
                 {bufferedNews.map((item, index) => (
                   <div
                     key={`${item.title}-${index}`}
-                    className="flex flex-col gap-5 w-[calc(100vw-48px)] md:w-[380px] lg:w-[420px] xl:w-[480px] shrink-0"
+                    className="flex flex-col gap-4 md:gap-5 w-[80vw] sm:w-[320px] md:w-[380px] lg:w-[420px] xl:w-[480px] shrink-0"
                   >
                     {/* Image Header */}
                     <div
-                      className="rounded-2xl overflow-hidden h-[250px] flex items-end p-6 text-white bg-cover bg-center relative group"
+                      className="rounded-2xl overflow-hidden h-[200px] md:h-[250px] flex items-end p-5 md:p-6 text-white bg-cover bg-center relative group"
                       style={{ backgroundImage: `url(${item.img})` }}
                     >
                       {/* Overlay Gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/70 transition-all duration-300"></div>
-                      <p className="relative z-10 text-xl font-bold whitespace-pre-line leading-tight">
+                      <p className="relative z-10 text-lg md:text-xl font-bold whitespace-pre-line leading-tight">
                         {item.title}
                       </p>
                     </div>
 
                     {/* Tag & Social Icon */}
                     <div className="flex items-center justify-between w-full">
-                      <span className="text-xs font-semibold border border-[#745893]/30 px-3 py-1 rounded-full text-[#745893] uppercase tracking-wider">
-                        # News
+                      <span className="text-[10px] md:text-xs font-semibold border border-[#745893]/30 px-3 py-1 rounded-full text-[#745893] uppercase tracking-wider">
+                        {language === 'amh' ? '# ዜና' : '# News'}
                       </span>
 
-                      <div className="w-10 h-10 rounded-full border border-[#745893] bg-[#745893] flex items-center justify-center cursor-pointer transition-all hover:bg-[#5d4677] hover:scale-110 shadow-md">
-                        <svg className="w-5 h-5 text-[#F7F7F5]" fill="currentColor" viewBox="0 0 24 24">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-[#745893] bg-[#745893] flex items-center justify-center cursor-pointer transition-all hover:bg-[#5d4677] hover:scale-110 shadow-md">
+                        <svg className="w-4 h-4 md:w-5 md:h-5 text-[#F7F7F5]" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.22 8h4.54v14H.22V8zm7.56 0h4.35v1.92h.06c.61-1.16 2.1-2.38 4.33-2.38 4.63 0 5.48 3.05 5.48 7.02V22h-4.54v-6.93c0-1.65-.03-3.78-2.3-3.78-2.3 0-2.65 1.8-2.65 3.66V22H7.78V8z" />
                         </svg>
                       </div>
                     </div>
 
                     {/* Content Snippet */}
-                    <p className="text-[#5F5A66] text-sm leading-relaxed line-clamp-3">
+                    <p className="text-[#5F5A66] text-xs md:text-sm leading-relaxed line-clamp-3">
                       {item.content}
                     </p>
 
                     {/* Footer */}
-                    <div className="flex justify-between items-center text-xs mt-auto border-t border-gray-100 pt-4">
+                    <div className="flex justify-between items-center text-[10px] md:text-xs mt-auto border-t border-gray-100 pt-3 md:pt-4 pb-2 md:pb-0">
                       <span className="text-gray-400 font-medium tracking-wide">{item.date}</span>
                       <Link to="/news" className="text-[#745893] font-bold cursor-pointer hover:underline underline-offset-4 flex items-center gap-1 group/more">
-                        Read More
+                        {language === 'amh' ? 'ተጨማሪ ያንብቡ' : 'Read More'}
                         <span className="transition-transform group-hover/more:translate-x-1">→</span>
                       </Link>
                     </div>
@@ -969,15 +956,15 @@ function Home() {
             </div>
 
             {/* Navigation Buttons Row - Positioned at the bottom right */}
-            <div className="flex justify-end items-center gap-6 mt-4">
+            <div className="flex justify-end items-center gap-4 md:gap-6 mt-6 md:mt-4">
               {/* Previous Button */}
               <button
                 onClick={prevSlide}
                 aria-label="Previous News"
-                className="w-14 h-14 rounded-full border-2 border-[#745893]/20 flex items-center justify-center text-[#745893] hover:bg-[#745893] hover:text-[#F7F7F5] hover:border-[#745893] transition-all duration-500 group shadow-sm hover:shadow-xl"
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-[#745893]/20 flex items-center justify-center text-[#745893] hover:bg-[#745893] hover:text-[#F7F7F5] hover:border-[#745893] transition-all duration-500 group shadow-sm hover:shadow-xl"
               >
                 <svg
-                  className="w-6 h-6 rotate-180 transition-transform duration-500 group-hover:-translate-x-1"
+                  className="w-5 h-5 md:w-6 md:h-6 rotate-180 transition-transform duration-500 group-hover:-translate-x-1"
                   viewBox="0 0 20 20"
                   fill="none"
                 >
@@ -995,10 +982,10 @@ function Home() {
               <button
                 onClick={nextSlide}
                 aria-label="Next News"
-                className="w-14 h-14 rounded-full bg-[#745893] text-[#F7F7F5] flex items-center justify-center hover:bg-[#5d4677] transition-all duration-500 group shadow-md hover:shadow-2xl hover:-translate-y-1"
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#745893] text-[#F7F7F5] flex items-center justify-center hover:bg-[#5d4677] transition-all duration-500 group shadow-md hover:shadow-2xl hover:-translate-y-1"
               >
                 <svg
-                  className="w-6 h-6 transition-transform duration-500 group-hover:translate-x-1"
+                  className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-500 group-hover:translate-x-1"
                   viewBox="0 0 20 20"
                   fill="none"
                 >
@@ -1020,18 +1007,18 @@ function Home() {
           {/* Header */}
           <div className="mb-6">
             <h2 className="text-[#745893] font-semibold text-2xl md:text-4xl leading-none uppercase">
-              Our Network of Care
+              {language === 'amh' ? 'የእንክብካቤ አውታረ መረባችን' : 'Our Network of Care'}
             </h2>
             <p className="text-[#5F5A66] text-sm mt-2">
-              Click on a branch to view full information.
+              {language === 'amh' ? 'ሙሉ መረጃ ለማየት ቅርንጫፍ ላይ ጠቅ ያድርጉ።' : 'Click on a branch to view full information.'}
             </p>
           </div>
 
           {/* Main Layout */}
-          <div className="flex flex-1 gap-6 overflow-hidden">
+          <div className="flex flex-col md:flex-row flex-1 gap-6 overflow-visible md:overflow-hidden">
 
-            {/* LEFT LIST */}
-            <div className="w-[220px] flex flex-col gap-3 overflow-y-auto pr-2">
+            {/* LEFT LIST / MOBILE TABS */}
+            <div className="w-full md:w-[220px] flex flex-row md:flex-col gap-2 md:gap-3 overflow-x-auto md:overflow-y-auto pb-2 md:pb-0 pr-0 md:pr-2 hide-scrollbar shrink-0">
               {branches.map((branch, index) => {
                 const isActive = index === activeBranchIndex;
 
@@ -1039,17 +1026,17 @@ function Home() {
                   <button
                     key={branch.name}
                     onClick={() => setActiveBranchIndex(index)}
-                    className={`flex items-center gap-3 px-4 py-3 text-left bg-white transition rounded-sm
-                      ${isActive ? "border-l-4 border-[#745893] shadow-sm" : "hover:shadow-sm"}
+                    className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 text-left bg-white transition rounded-2xl md:rounded-sm shrink-0 whitespace-nowrap
+                      ${isActive ? "border-b-4 md:border-b-0 md:border-l-4 border-[#745893] shadow-sm bg-[#F6EAF8]" : "hover:shadow-sm border-b-4 md:border-b-0 md:border-l-4 border-transparent"}
                     `}
                   >
-                    <div className={`w-9 h-9 rounded-full ${isActive ? "bg-[#745893]" : "bg-[#745893]/10"} flex items-center justify-center`}>
-                      <svg className={`w-4 h-4 ${isActive ? "text-[#F7F7F5]" : "text-[#745893]"}`} viewBox="0 0 24 24" fill="currentColor">
+                    <div className={`w-7 h-7 md:w-9 md:h-9 rounded-full ${isActive ? "bg-[#745893]" : "bg-[#745893]/10"} flex items-center justify-center shrink-0`}>
+                      <svg className={`w-3.5 h-3.5 md:w-4 md:h-4 ${isActive ? "text-[#F7F7F5]" : "text-[#745893]"}`} viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                       </svg>
                     </div>
 
-                    <span className={`text-base font-medium ${isActive ? "text-[#745893]" : ""}`}>
+                    <span className={`text-sm font-medium ${isActive ? "text-[#745893]" : ""}`}>
                       {branch.name.replace(" Branch", "")}
                     </span>
                   </button>
@@ -1058,69 +1045,88 @@ function Home() {
             </div>
 
             {/* RIGHT CONTENT */}
-            <div className="flex-1 bg-white rounded-xl shadow-sm flex overflow-hidden">
+            <div className="flex-1 bg-white rounded-xl shadow-sm flex flex-col md:flex-row overflow-hidden min-h-[400px]">
 
               {/* DETAILS */}
-              <div className="flex-1 p-6 flex flex-col justify-between">
+              <div className="flex-1 relative min-h-[400px] overflow-hidden">
+                <img
+                  src={[boleImg, kiloImg, kebenaImg, lebuImg, summitImg][activeBranchIndex]}
+                  alt={activeBranch.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
 
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#745893] uppercase">
-                    {activeBranch.name}
-                  </h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/30" />
 
-                  <p className="text-sm text-[#6D6576] mt-3 leading-relaxed max-w-xl">
-                    {activeBranch.description}
-                  </p>
+                <div className="relative z-10 h-full p-5 md:p-6 flex flex-col justify-between text-white">
+                  <div>
+                    <h3 className="text-xl md:text-2xl tracking-wider font-semibold uppercase drop-shadow">
+                      {activeBranch.name}
+                    </h3>
 
-                  {/* Info Grid */}
-                  <div className="grid grid-cols-2 gap-4 mt-5 text-sm">
-                    <div>
-                      <span className="text-xs text-gray-400 uppercase">Phone</span>
-                      <p className="font-semibold">{activeBranch.phone}</p>
-                    </div>
+                    <p className="text-xs md:text-sm mt-2 md:mt-3 leading-relaxed max-w-xl text-white/90">
+                      {activeBranch.description}
+                    </p>
 
-                    <div>
-                      <span className="text-xs text-gray-400 uppercase">Address</span>
-                      <p className="font-semibold">{activeBranch.address}</p>
-                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 text-sm">
+                      <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/15">
+                        <span className="text-[10px] md:text-xs text-white/70 uppercase">
+                          {language === 'amh' ? 'ስልክ' : 'Phone'}
+                        </span>
+                        <p className="font-medium tracking-widest mt-1">{activeBranch.phone}</p>
+                      </div>
 
-                    <div>
-                      <span className="text-xs text-gray-400 uppercase">Hours</span>
-                      <p className="font-semibold whitespace-pre-line">
-                        {activeBranch.hours}
-                      </p>
+                      <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/15">
+                        <span className="text-[10px] md:text-xs text-white/70 uppercase">
+                          {language === 'amh' ? 'አድራሻ' : 'Address'}
+                        </span>
+                        <p className="font-medium tracking-wider mt-1 pr-2">{activeBranch.address}</p>
+                      </div>
+
+                      <div className="col-span-1 sm:col-span-2 bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/15">
+                        <span className="text-[10px] md:text-xs text-white/70 uppercase">
+                          {language === 'amh' ? 'ሰዓታት' : 'Hours'}
+                        </span>
+                        <p className="font-medium tracking-wider whitespace-pre-line mt-1">
+                          {activeBranch.hours}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Buttons */}
-                <div className="flex gap-3 mt-4">
-                  <Link to="/appointment" className="bg-[#FFF200] px-5 py-2 rounded-full text-sm font-semibold">
-                    Set Appointment
-                  </Link>
+                  <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                    <Link
+                      to="/appointment"
+                      className="bg-[#FFF200] px-5 py-2.5 md:py-2 rounded-full text-center text-sm font-semibold hover:bg-[#745893] hover:text-white transition-colors text-black"
+                    >
+                      {language === 'amh' ? 'ቀጠሮ ይያዙ' : 'Set Appointment'}
+                    </Link>
 
-                  <Link to="/appointment" className="bg-[#745893] text-white px-5 py-2 rounded-full text-sm">
-                    View Map
-                  </Link>
+                    <Link
+                      to="/appointment"
+                      className="bg-white/15 backdrop-blur-md border border-white/20 text-white px-5 py-2.5 md:py-2 rounded-full text-center text-sm hover:bg-white/25 transition-colors"
+                    >
+                      {language === 'amh' ? 'ካርታ ይመልከቱ' : 'View Map'}
+                    </Link>
+                  </div>
                 </div>
               </div>
 
               {/* SERVICES */}
-              <div className="w-[240px] bg-[#F6EAF8] p-5 flex flex-col">
-                <h4 className="text-xl text-[#745893] uppercase">
-                  Services
+              <div className="w-full md:w-[240px] lg:w-[280px] bg-[#F6EAF8] p-5 md:p-6 flex flex-col border-t md:border-t-0 md:border-l border-[#745893]/10">
+                <h4 className="text-lg md:text-xl text-[#745893] uppercase tracking-wider font-semibold">
+                  {language === 'amh' ? 'አገልግሎቶች' : 'Services'}
                 </h4>
 
-                <div className="mt-4 space-y-3 text-sm overflow-y-auto pr-1">
+                <div className="mt-4 space-y-3 md:space-y-4 text-xs md:text-sm overflow-y-auto pr-1 flex-1">
                   {activeBranch.unavailable ? (
-                    <p className="text-gray-500">
-                      Service list unavailable.
+                    <p className="text-gray-500 italic">
+                      {language === 'amh' ? 'የአገልግሎት ዝርዝር አልተገኘም።' : 'Service list unavailable.'}
                     </p>
                   ) : (
                     activeBranch.services.map((service) => (
                       <div key={service} className="flex gap-2 items-start">
-                        <div className="w-2 h-2 bg-[#745893] rounded-full mt-1.5" />
-                        <span>{service}</span>
+                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#745893] rounded-full mt-1.5 md:mt-2 shrink-0" />
+                        <span className="text-[#333] leading-snug font-light break-words">{service}</span>
                       </div>
                     ))
                   )}

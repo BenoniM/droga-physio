@@ -54,7 +54,7 @@ function SectionHeading({ title, subtitle }) {
         <div className="h-[1px] bg-[#745893]/40 w-16" />
       </div>
       <h2 
-        className="font-['Compacta'] text-[#745893] text-[clamp(2.5rem,6vw,4rem)] leading-[0.9] uppercase"
+        className="md:font-['Compacta'] text-[#745893] text-[clamp(2rem,6vw,3rem)] leading-[0.9] uppercase"
         style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)', transition: 'all 0.8s ease 0.1s' }}
       >
         {title}
@@ -201,6 +201,23 @@ export default function Blog() {
   const historyRef = useRef(Array(BUBBLE_COUNT).fill({ x: -1000, y: -1000 }))
   const [maskStyle, setMaskStyle] = useState('')
   const [isInsideHero, setIsInsideHero] = useState(false)
+  const [isResponsive, setIsResponsive] = useState(window.innerWidth < 1024)
+
+  // Automatic blobs for high-fidelity fluid motion
+  const blobsRef = useRef(Array.from({ length: 5 }, (_, i) => ({
+      x: Math.random() * (window.innerWidth || 1000),
+      y: Math.random() * 600,
+      vx: (Math.random() - 0.5) * 1.2,
+      vy: (Math.random() - 0.5) * 1.2,
+      r: 40 + Math.random() * 60,
+      isCursor: i === 0 // First blob can follow cursor on desktop
+  })))
+
+  useEffect(() => {
+    const handleResize = () => setIsResponsive(window.innerWidth < 1024)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Scroll listener
   useEffect(() => {
@@ -212,22 +229,47 @@ export default function Blog() {
   // Comet animation loop
   useEffect(() => {
     let rafId
+    const el = heroRef.current
+
     const animate = () => {
-      historyRef.current.unshift({ ...targetRef.current })
-      if (historyRef.current.length > BUBBLE_COUNT) historyRef.current.pop()
-      const gradients = baseSizes
-        .map((size, i) => {
-          const pos = historyRef.current[i] || historyRef.current.at(-1)
-          return `radial-gradient(circle ${size / 2}px at ${pos.x}px ${pos.y}px, black 100%, transparent 100%)`
+      const rect = el?.getBoundingClientRect()
+      const width = rect?.width || window.innerWidth
+      const height = rect?.height || 600
+
+      if (isResponsive) {
+        // SVG Metaballs Logic
+        blobsRef.current.forEach((blob, i) => {
+          const circleEl = document.getElementById(`blob-${i}`)
+          if (!circleEl) return
+          blob.x += blob.vx
+          blob.y += blob.vy
+          if (blob.x < -50 || blob.x > width + 50) blob.vx *= -1
+          if (blob.y < -50 || blob.y > height + 50) blob.vy *= -1
+          blob.x += Math.sin(Date.now() * 0.0005 + i) * 0.4
+          blob.y += Math.cos(Date.now() * 0.0005 + i) * 0.4
+          circleEl.setAttribute('cx', blob.x)
+          circleEl.setAttribute('cy', blob.y)
+          circleEl.setAttribute('r', blob.r)
         })
-        .reverse()
-        .join(',')
-      setMaskStyle(gradients)
+        if (!isInsideHero) setIsInsideHero(true)
+      } else {
+        // Desktop Cursor Trail Logic
+        historyRef.current.unshift({ ...targetRef.current })
+        if (historyRef.current.length > BUBBLE_COUNT) historyRef.current.pop()
+        const gradients = baseSizes
+          .map((size, i) => {
+            const pos = historyRef.current[i] || historyRef.current.at(-1)
+            return `radial-gradient(circle ${size / 2}px at ${pos.x}px ${pos.y}px, black 100%, transparent 100%)`
+          })
+          .reverse()
+          .join(',')
+        setMaskStyle(gradients)
+      }
       rafId = requestAnimationFrame(animate)
     }
     rafId = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafId)
-  }, [])
+  }, [isResponsive, isInsideHero])
 
   const handleHeroMove = (e) => {
     const rect = heroRef.current?.getBoundingClientRect()
@@ -243,9 +285,27 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-[#F7F7F5] overflow-x-hidden font-['Delight']">
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="fixed top-0 left-0 w-full z-200">
         <Navbar scrollY={scrollY} />
       </div>
+
+      {/* Hidden SVG for Metaball Filter/Mask */}
+      <svg style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none' }}>
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -10" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+          <mask id="hero-mask" maskContentUnits="userSpaceOnUse">
+            <g filter="url(#goo)">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <circle key={i} id={`blob-${i}`} r="80" fill="white" />
+              ))}
+            </g>
+          </mask>
+        </defs>
+      </svg>
 
       {/* ── HERO SECTION ───────────────────────────────────────────────────── */}
       <section
@@ -253,7 +313,7 @@ export default function Blog() {
         onPointerMove={handleHeroMove}
         onPointerEnter={handleHeroEnter}
         onPointerLeave={handleHeroLeave}
-        className="relative h-[75vh] w-full overflow-hidden bg-[#745893] pt-16 cursor-none"
+        className="relative h-[75vh] w-full overflow-hidden bg-[#745893] pt-16 md:cursor-none"
       >
         {/* Bottom layer — yellow headline */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10">
@@ -265,10 +325,10 @@ export default function Blog() {
             <div className="h-[1px] bg-[#FFF200]/60 w-20" />
           </div>
           <h1
-            className="max-w-6xl font-['Compacta'] text-[#FFF200] text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
+            className="max-w-6xl md:font-['Compacta'] text-[#F7F7F5] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
           >
-            Wellness & Pre-Therapy<br />Tips For Daily Life
+            Wellness And Pre-Therapy<br />Tips For Daily Life
           </h1>
         </div>
 
@@ -277,10 +337,12 @@ export default function Blog() {
           className="pointer-events-none absolute inset-0 z-20"
           style={{
             display: isInsideHero ? 'block' : 'none',
-            WebkitMaskImage: maskStyle,
-            maskImage: maskStyle,
+            WebkitMaskImage: isResponsive ? 'url(#hero-mask)' : maskStyle,
+            maskImage: isResponsive ? 'url(#hero-mask)' : maskStyle,
             WebkitMaskRepeat: 'no-repeat',
             maskRepeat: 'no-repeat',
+            WebkitMaskSize: isResponsive ? '100% 100%' : 'auto',
+            maskSize: isResponsive ? '100% 100%' : 'auto',
           }}
         >
           <img
@@ -297,10 +359,10 @@ export default function Blog() {
               <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
             </div>
             <h1
-              className="max-w-6xl font-['Compacta'] text-[#F7F7F5] text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
+              className="max-w-6xl md:font-['Compacta'] text-[#FFF200] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
               style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
             >
-              Wellness & Pre-Therapy<br />Tips For Daily Life
+              Wellness And Pre-Therapy<br />Tips For Daily Life
             </h1>
           </div>
         </div>
@@ -405,20 +467,24 @@ export default function Blog() {
 function NewsletterSection() {
   const [ref, visible] = useReveal(0.15)
   return (
-    <section ref={ref} className="relative w-full h-[50vh] min-h-[400px] overflow-hidden">
+    <section className="relative w-full h-[40vh] md:h-[50vh] min-h-[350px] md:min-h-[400px] overflow-hidden">
+        {/* Background Image with Blur */}
         <div className="absolute inset-0">
-            <img 
-                src={CtaBgImg} 
-                alt="CTA Background" 
+            <img
+                src={CtaBgImg}
+                alt="CTA Background"
                 className="w-full h-full object-cover blur-[4px] scale-105"
             />
             <div className="absolute inset-0 bg-[#745893]/55"></div>
         </div>
+
+        {/* Content */}
         <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-            <h2 className="text-white text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                Start Your Journey to <br /> Pain-Free Mobility Today!
+            <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
+                Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
             </h2>
-            <Link to="/appointment" className="bg-white text-[#745893] px-10 py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
+
+            <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
                 Book An Appointment
                 <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                     <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
