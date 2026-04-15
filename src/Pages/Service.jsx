@@ -8,7 +8,7 @@ import CtaBgImg from '../assets/about/cta_background.png'
 import gsap from 'gsap'
 
 // Import 12 specialized service images
-import Serv1 from '../assets/serv/IMG_3638.JPG'
+import Serv1 from '../assets/serv/IMG_3638.jpg'
 import Serv2 from '../assets/serv/IMG_3640.JPG'
 import Serv3 from '../assets/serv/IMG_3660.JPG'
 import Serv4 from '../assets/serv/anthony-soberal-IVXtVwMRJY0-unsplash.jpg'
