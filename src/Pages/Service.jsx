@@ -15,6 +15,7 @@ import Serv4 from '../assets/serv/anthony-soberal-IVXtVwMRJY0-unsplash.jpg'
 import Serv5 from '../assets/serv/chidy-young-a-Ml4ndeqos-unsplash.jpg'
 import Serv6 from '../assets/serv/Gemini_Generated_Image_ez5a9yez5a9yez5a.png'
 import Serv7 from '../assets/serv/nexa-black-UK8S5JAf6XE-unsplash.jpg'
+
 import Serv8 from '../assets/serv/photo_2026-03-27_09-28-57.jpg'
 import Serv9 from '../assets/serv/photo_2026-03-27_11-05-13.jpg'
 import Serv10 from '../assets/serv/tobias-nii-kwatei-quartey-eGdGkZAI6h4-unsplash.jpg'
