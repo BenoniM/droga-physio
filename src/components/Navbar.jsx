@@ -185,7 +185,48 @@ function Navbar({ scrollY, isLightBg: propIsLightBg }) {
                       {isActive && (
                         <img key={animTrigger} src={highlight} alt="" className={`pointer-events-none absolute inset-0 h-full w-full ${isDropdown ? 'scale-[1.2]' : 'scale-[1.85]'} object-fill opacity-80 animate-swoosh`} />
                       )}
-                      {/* ... (Drop down menu logic remains same) */}
+                      {isDropdown && mediaOpen && (
+                        <div className="absolute left-1/2 top-full -translate-x-1/2 pt-4">
+                          <div className="min-w-[210px] overflow-hidden rounded-sm border border-white/15 bg-[#F7F7F5]/95 shadow-2xl backdrop-blur-xl">
+                            {item.dropdown.map((subItem) => {
+                              const subActive = location.pathname === subItem.path
+
+                              return (
+                                <Link
+                                  key={subItem.label}
+                                  to={subItem.path}
+                                  onClick={() => setMediaOpen(false)}
+                                  className={`group flex items-center justify-between px-5 py-3 text-sm font-medium transition-all duration-200 ${
+                                    subActive
+                                      ? 'bg-[#745893] text-[#F7F7F5]'
+                                      : 'text-[#745893] hover:bg-[#745893] hover:text-[#F7F7F5]'
+                                  }`}
+                                >
+                                  <span>{subItem.label}</span>
+
+                                  <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                    className={`transition-all -rotate-45 group-hover:translate-x-1 ${
+                                      subActive ? 'text-[#F7F7F5]' : 'text-[#745893]'
+                                    } group-hover:text-[#F7F7F5]`}
+                                  >
+                                    <path
+                                      d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </li>
                   )
                 })}
