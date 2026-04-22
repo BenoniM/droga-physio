@@ -71,7 +71,7 @@ function Service() {
             image: Serv1
         },
         {
-            title: "Injury Rehabilitation-",
+            title: "Injury Rehabilitation",
             description: "Sports Injuries, Post-Surgical Rehabilitation, Work-Related Injuries, Motor Vehicle Accident Recovery.",
             image: Serv2
         },
