@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import ServiceImg from '../assets/serv/IMG_3492.JPG'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -13,6 +14,7 @@ const baseSizes = Array.from({ length: BUBBLE_COUNT }, (_, i) => {
 })
 
 function Faq() {
+    const { t } = useLanguage()
     const heroRef = useRef(null)
     const targetRef = useRef({ x: -1000, y: -1000 })
     const historyRef = useRef(Array(BUBBLE_COUNT).fill({ x: -1000, y: -1000 }))
@@ -39,36 +41,7 @@ function Faq() {
     const [activeIndex, setActiveIndex] = useState(0) // First one open by default
     const [scrollY, setScrollY] = useState(0)
 
-    const faqs = [
-        {
-            question: "How can you help my problem?",
-            answer: "We can help you by providing high quality physiotherapy care options by our expert physiotherapists. We use various therapeutic interventions to alleviate your pain and maximize your physical functionality. Such as; manual therapy, electrotherapy, therapeutic exercise and different therapeutic procedures. We implement highly evidence based therapy practice and high tech machineries."
-        },
-        {
-            question: "How is your work process?",
-            answer: "First you need to book via online or get registered in person for the physiotherapy evaluation. After in person registration pre medical checkup will be conducted by senior nurses. The nurse will check all your vital signs; take your previous medical and medication history. Then a physiotherapist will do the physical assessment, identify your physical illness cause and develop individualized therapy plan. Then the number of expected therapy follow up days and frequency will be decided. Then you start your therapy after you settle the payment."
-        },
-        {
-            question: "Do you give home therapy service?",
-            answer: "Currently No, We only have out patient service."
-        },
-        {
-            question: "Do you have acupuncture service?",
-            answer: "Yes we do have."
-        },
-        {
-            question: "Do you give chiropractic service as well?",
-            answer: "We don’t give chiropractic service but we manage efficiently all conditions that a chiropractor does. Like, we adjust the spine and peripheral joints and we rehabilitate beyond just an adjustment."
-        },
-        {
-            question: "Do you have MRI service alongside?",
-            answer: "No we don’t have but there are MRI centers nearby to our clinics."
-        },
-        {
-            question: "Can I choose the gender of my therapist?( Male or Female)",
-            answer: "Sure we have both female and male therapist and you can choose upon registration."
-        }
-    ]
+    const faqs = t.faqPage.faqs
 
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY)
@@ -182,7 +155,7 @@ function Faq() {
                     <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
                         <div className="h-[1px] bg-[#FFF200]/60 w-20" />
                         <span className="text-[#FFF200] font-medium tracking-[0.3em] text-sm uppercase">
-                            Droga Physiotherapy
+                            {t.faqPage.hero.subtitle}
                         </span>
                         <div className="h-[1px] bg-[#FFF200]/60 w-20" />
                     </div>
@@ -190,9 +163,8 @@ function Faq() {
                     <h1
                         className="max-w-6xl md:font-semibold text-[#F7F7F5] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(2rem,5.5vw,4rem)] leading-[0.9] uppercase animate-fade-up"
                         style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-                    >
-                        Have questions about our <br /> treatments, appointments? 
-                    </h1>
+                        dangerouslySetInnerHTML={{ __html: t.faqPage.hero.title }}
+                    />
                 </div>
 
                 {/* Top reveal layer — image on hover */}
@@ -218,7 +190,7 @@ function Faq() {
                         <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
                             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
                             <span className="text-[#F7F7F5] font-medium tracking-[0.3em] text-sm uppercase">
-                                Droga Physiotherapy
+                                {t.faqPage.hero.subtitle}
                             </span>
                             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
                         </div>
@@ -226,9 +198,8 @@ function Faq() {
                         <h1
                             className="max-w-6xl md:font-semibold text-[#FFF200] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(2rem,5.5vw,4rem)] leading-[0.9] uppercase animate-fade-up"
                             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-                        >
-                            Have questions about our <br /> treatments, appointments? 
-                        </h1>
+                            dangerouslySetInnerHTML={{ __html: t.faqPage.hero.title }}
+                        />
                     </div>
                 </div>
             </section>
@@ -242,12 +213,12 @@ function Faq() {
                             <div className="w-2 h-2 bg-[#745893] rotate-45 -mr-1"></div>
                         </div>
                         <h3 className="text-[#745893] font-medium tracking-[0.2em] uppercase text-xl whitespace-nowrap">
-                            FAQ
+                            {t.faqPage.faqSection.subtitle}
                         </h3>
                     </header>
 
-                    <h2 className="text-[#745893] font-['Compacta'] text-[clamp(2.5rem,6vw,5.5rem)] leading-[0.85] uppercase -mt-4">
-                        Frequently Asked Questions
+                    <h2 className="text-[#745893] text-[clamp(2.5rem,6vw,3rem)] leading-[0.85] Capitalize -mt-4">
+                        {t.faqPage.faqSection.title}
                     </h2>
 
                     <div className="flex flex-col mt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -324,12 +295,13 @@ function Faq() {
 
                 {/* Content */}
                 <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-                    <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
-                        Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
-                    </h2>
+                    <h2 
+                        className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12"
+                        dangerouslySetInnerHTML={{ __html: t.faqPage.cta.title }}
+                    />
 
                     <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
-                        Book An Appointment
+                        {t.faqPage.cta.button}
                         <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                             <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>

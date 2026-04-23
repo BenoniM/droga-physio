@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Navbar from '../components/Navbar'
+import { useLanguage } from '../context/LanguageContext'
 import Footer from '../components/Footer'
 import gsap from 'gsap'
 
@@ -11,6 +12,7 @@ import LebuImg from '../assets/contact/Lebu.jpg'
 import SummitImg from '../assets/contact/Summit.jpg'
 
 export default function Contact() {
+  const { t } = useLanguage()
   const [scrollY, setScrollY] = useState(0)
   const editorRef = useRef(null)
   
@@ -89,46 +91,15 @@ export default function Contact() {
     }
   }
 
-  const locations = [
-    {
-      name: "Arat Kilo",
-      address: "Arat kilo Infront of Tourist Hotel",
-      leadDoctor: "Emnet Worku Sime",
-      phone: "+251115578906 / +251965757526",
-      image: KiloImg
-    },
-    {
-      name: "Bole",
-      address: "Bole Next to Japan Embassy",
-      leadDoctor: "Lewam Mamo Tewab",
-      phone: "+251965757523 / +251116687006",
-      image: BoleImg
-    },
-    {
-      name: "Lebu Varnero",
-      address: "Lebu Varnero Infront of Chanoly Noodles",
-      leadDoctor: "Yared Tekelemariam Megersa",
-      phone: "+251935999777",
-      image: LebuImg
-    },
-    {
-      name: "Bel Air Kebena",
-      address: "Droga Pediatric physiotherapy center",
-      leadDoctor: "Tesfaye Woyesa Fano",
-      phone: "+251940332122",
-      image: KebenaImg
-    },
-    {
-      name: "Summit",
-      address: "Summit Safeway area",
-      leadDoctor: "Kitachew H/Michael Tessema",
-      phone: "+251965757523",
-      image: SummitImg
-    }
-  ]
+  const locationImages = [KiloImg, BoleImg, LebuImg, KebenaImg, SummitImg]
+
+  const locations = t.contactPage.locations.items.map((loc, idx) => ({
+    ...loc,
+    image: locationImages[idx]
+  }))
 
   return (
-    <div className="min-h-screen bg-white font-['Delight'] overflow-x-hidden text-[#1A1A1A]" onMouseMove={handleMouseMove}>
+    <div className="min-h-screen bg-white overflow-x-hidden text-[#1A1A1A]" onMouseMove={handleMouseMove}>
       <div className="w-full fixed top-0 z-200 transition-all duration-300">
         <Navbar scrollY={scrollY} />
       </div>
@@ -167,26 +138,26 @@ export default function Contact() {
               
               <input 
                 type="text" 
-                placeholder="Name" 
+                placeholder={t.contactPage.form.name} 
                 className="w-full pb-3 mb-6 md:mb-10 text-[16px] md:text-[17px] border-b border-[#D1CBD8] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
               
               <input 
                 type="email" 
-                placeholder="Email" 
+                placeholder={t.contactPage.form.email} 
                 className="w-full pb-3 mb-6 md:mb-10 text-[16px] md:text-[17px] border-b border-[#D1CBD8] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
               
               <input 
                 type="text" 
-                placeholder="Phone (Optional)" 
+                placeholder={t.contactPage.form.phone} 
                 className="w-full pb-3 mb-6 md:mb-10 text-[16px] md:text-[17px] border-b border-[#D1CBD8] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
               
               <input 
                 type="text" 
-                placeholder="Subject" 
-                className="w-full pb-3 mb-8 md:mb-12 text-[16px] md:text-[17px] border-b border-[#D1CBD8] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
+                placeholder={t.contactPage.form.subject} 
+                className="w-full pb-3 mb-6 md:mb-10 text-[16px] md:text-[17px] border-b border-[#D1CBD8] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
 
               {/* Rich Text Editor Functional */}
@@ -211,7 +182,7 @@ export default function Contact() {
                 <div 
                   ref={editorRef}
                   contentEditable
-                  data-placeholder="Write Your Message"
+                  data-placeholder={t.contactPage.form.message}
                   className="w-full p-4 md:p-5 outline-none bg-transparent font-sans text-[16px] md:text-[17px] text-[#333] min-h-[150px] md:min-h-[180px] cursor-text empty:before:content-[attr(data-placeholder)] empty:before:text-[#A29CA8]"
                 ></div>
               </div>
@@ -219,7 +190,7 @@ export default function Contact() {
               {/* Submit Button */}
               <div className="mt-2">
                 <button type="submit" className="bg-[#FFF200] text-black font-semibold text-[14px] md:text-[15px] px-8 py-3.5 md:py-4 rounded-full flex items-center justify-center gap-3 hover:scale-[1.03] active:scale-95 transition-all duration-300 w-full sm:w-auto inline-flex shadow-sm">
-                  Send Message
+                  {t.contactPage.form.submit}
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
@@ -240,11 +211,11 @@ export default function Contact() {
                   <div className="w-1.5 h-1.5 rotate-45 bg-[#745893] absolute right-0 translate-x-1/2"></div>
                 </div>
                 <span className="text-[#745893] text-sm md:text-lg font-medium tracking-[0.1em] uppercase ml-6">
-                  CONTACT
+                  {t.contactPage.header.subtitle}
                 </span>
               </div>
               <h1 className="text-xl sm:text-2xl md:text-[1.6rem] xl:text-[2rem] font-medium leading-[1.3] text-[#222]">
-                Ready To Take The First Step Toward Better Health? Contact Us Today To Book An Appointment.
+                {t.contactPage.header.title}
               </h1>
             </div>
 
@@ -266,7 +237,7 @@ export default function Contact() {
                         {loc.address}
                       </p>
                       <p className="text-[#745893]/80 text-[13px] md:text-[14px] font-medium mt-1">
-                        Lead: {loc.leadDoctor}
+                        {t.contactPage.locations.lead} {loc.leadDoctor}
                       </p>
                     </div>
 

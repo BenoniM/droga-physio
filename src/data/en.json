@@ -194,5 +194,489 @@
       "content": "Improve your posture and avoid long-term damage...",
       "date": "2025-10-20"
     }
-  ]
+  ],
+  "aboutPage": {
+    "hero": {
+      "subtitle": "Droga Physiotherapy",
+      "title": "Discover our mission to provide exceptional <br /> physiotherapy services"
+    },
+    "aboutUs": {
+      "subtitle": "About Us",
+      "title": "Droga <br/> Physiotherapy",
+      "desc1": "Droga Physiotherapy Specialty Clinic was established in 2015 in Addis Ababa by a group of health care professionals, who have an interest in developing the scientific back ground of physiotherapy in Ethiopia.",
+      "desc2": "We are striving to increase the number of branches in the capital and regional cities. Currently the clinic is serving the community with its two branches located in Addis Ababa Arat kilo next to tourist hotel and Around the former Japan Embassy."
+    },
+    "accreditation": {
+      "subtitle": "Accreditation",
+      "title": "Our Accreditation. Nationally",
+      "desc": "We take pride in being nationally accredited for maintaining the highest standards of physiotherapy care and patient satisfaction.",
+      "stats": {
+        "treatment": "Treatment",
+        "service": "Service",
+        "therapist": "Therapist",
+        "facilities": "Facilities"
+      }
+    },
+    "missionVision": {
+      "missionSubtitle": "Service / Purpose",
+      "missionTitle": "Our<br />Mission",
+      "missionDesc1": "Continuing to be quality driven clinic in Ethiopia while providing high quality, effective, and affordable services.",
+      "missionDesc2": "We deliver evidence-based, patient-centered physiotherapy services that restore function, reduce pain, and enhance quality of life through skilled professionals and innovative rehabilitation solutions.",
+      "visionSubtitle": "Service / Future Focus",
+      "visionTitle": "Our<br />Vision",
+      "visionDesc": "To be Ethiopia’s leading physiotherapy and rehabilitation provider, transforming lives through excellence in movement and care."
+    },
+    "values": {
+      "subtitle": "Core Beliefs",
+      "title": "Our Values",
+      "cards": [
+        {
+          "title": "01 / Integrity",
+          "points": ["Do The Right Thing", "Walk The Talk", "Foster Sound Decisions"]
+        },
+        {
+          "title": "02 / Customer Centric",
+          "points": ["Listen First", "Go The Extra Mile", "Innovate To Add Value"]
+        },
+        {
+          "title": "03 / Care",
+          "points": ["Care For Us (Employee and Terms)", "Care For Community", "Care For The Planet"]
+        }
+      ]
+    },
+    "experts": {
+      "subtitle": "Professional Team",
+      "title": "Our Experts",
+      "roles": {
+        "director": "Physiotherapy Director",
+        "managerBole": "Bole Physiotherapy Clinic Branch Manager",
+        "manager4Kilo": "4 Kilo Physiotherapy Clinic Branch Manager",
+        "managerQebena": "Qebena Physiotherapy Clinic Branch Manager",
+        "managerLebu": "Lebu Physiotherapy Clinic Branch Manager",
+        "managerSummit": "Summit Physiotherapy Clinic Branch Manager"
+      },
+      "names": {
+        "nebiyou": "Nebiyou Tesfaye Haile",
+        "lewam": "Lewam Mamo Tewabe",
+        "emnet": "Emnet Worku Sime",
+        "tesfaye": "Tesfaye Woyesa Fano",
+        "yared": "Yared Tekelemariam Megersa",
+        "kitachew": "Kitachew H/Michael Tessema"
+      },
+      "branches": {
+        "headquarters": "Headquarters",
+        "bole": "Bole Branch",
+        "4kilo": "4 Kilo Branch",
+        "qebena": "Qebena Branch",
+        "lebu": "Lebu Branch",
+        "summit": "Summit Branch"
+      }
+    },
+    "cta": {
+      "title": "Start Your Journey to <br className=\"hidden sm:block\" /> Pain-Free Mobility Today!",
+      "button": "Book An Appointment"
+    }
+  },
+  "servicePage": {
+    "hero": {
+      "subtitle": "Droga Physiotherapy",
+      "title": "Explore our range of specialized services <br /> designed to meet your unique needs"
+    },
+    "interactive": {
+      "splitBy": " and ",
+      "and": " And "
+    },
+    "branchServices": {
+      "title": "Our Services",
+      "availableAt": "Available At:",
+      "consultationAll": "Consultation at all branches."
+    },
+    "branches": {
+      "bole": "Bole Branch",
+      "4kilo": "4 Kilo Branch",
+      "qebena": "Kebena Branch (Pediatric)",
+      "lebu": "Lebu Branch",
+      "summit": "Summit Branch"
+    },
+    "services": [
+      {
+        "title": "Pain Management and Relief",
+        "description": "Chronic Back and Neck Pain, Joint Pain (Shoulder, Knee, Hip), Headache and Migraine Relief."
+      },
+      {
+        "title": "Injury Rehabilitation",
+        "description": "Sports Injuries, Post-Surgical Rehabilitation, Work-Related Injuries, Motor Vehicle Accident Recovery."
+      },
+      {
+        "title": "Neurological Rehabilitation",
+        "description": "Regain strength, balance, and coordination to improve independence after a stroke."
+      },
+      {
+        "title": "Strength and Conditioning",
+        "description": "Muscle Imbalance Correction, Core Strengthening, Pre- and Post-Natal Care."
+      },
+      {
+        "title": "Specialized Programs",
+        "description": "Arthritis Management, Balance and Fall Prevention, Vestibular Rehabilitation (for Vertigo)."
+      },
+      {
+        "title": "Mobility and Movement Restoration",
+        "description": "Gait Analysis and Re-training, Restoring Range of Motion."
+      },
+      {
+        "title": "Gross Motor Skills Development",
+        "description": "Milestone Achievement: Helping infants and toddlers reach key motor milestones."
+      },
+      {
+        "title": "Neuro Developmental Support",
+        "description": "Cerebral Palsy Management, Torticollis and Plagiocephaly, Genetic Condition Support."
+      },
+      {
+        "title": "Rehabilitation and Injury Care",
+        "description": "Sports Injury Rehab, Post-Surgical Recovery, Bracing and Equipment Assessment."
+      },
+      {
+        "title": "Fine Motor and School Skills",
+        "description": "Handwriting Improvement, Scissor Skills and Tool Use, Sensory Processing."
+      },
+      {
+        "title": "Activities of Daily Living (ADLs)",
+        "description": "Self-Care Independence, Organization and Executive Functioning, Play Skills Development."
+      },
+      {
+        "title": "Regulation and Behavior",
+        "description": "Emotional Regulation, Focus and Attention, ADHD support."
+      }
+    ],
+    "cta": {
+      "title": "Start Your Journey to <br className=\"hidden sm:block\" /> Pain-Free Mobility Today!",
+      "button": "Book An Appointment"
+    }
+  },
+  "faqPage": {
+    "hero": {
+      "subtitle": "Droga Physiotherapy",
+      "title": "Have questions about our <br /> treatments, appointments?"
+    },
+    "faqSection": {
+      "subtitle": "FAQ",
+      "title": "Frequently Asked Questions"
+    },
+    "faqs": [
+      {
+        "question": "How can you help my problem?",
+        "answer": "We can help you by providing high quality physiotherapy care options by our expert physiotherapists. We use various therapeutic interventions to alleviate your pain and maximize your physical functionality. Such as; manual therapy, electrotherapy, therapeutic exercise and different therapeutic procedures. We implement highly evidence based therapy practice and high tech machineries."
+      },
+      {
+        "question": "How is your work process?",
+        "answer": "First you need to book via online or get registered in person for the physiotherapy evaluation. After in person registration pre medical checkup will be conducted by senior nurses. The nurse will check all your vital signs; take your previous medical and medication history. Then a physiotherapist will do the physical assessment, identify your physical illness cause and develop individualized therapy plan. Then the number of expected therapy follow up days and frequency will be decided. Then you start your therapy after you settle the payment."
+      },
+      {
+        "question": "Do you give home therapy service?",
+        "answer": "Currently No, We only have out patient service."
+      },
+      {
+        "question": "Do you have acupuncture service?",
+        "answer": "Yes we do have."
+      },
+      {
+        "question": "Do you give chiropractic service as well?",
+        "answer": "We don’t give chiropractic service but we manage efficiently all conditions that a chiropractor does. Like, we adjust the spine and peripheral joints and we rehabilitate beyond just an adjustment."
+      },
+      {
+        "question": "Do you have MRI service alongside?",
+        "answer": "No we don’t have but there are MRI centers nearby to our clinics."
+      },
+      {
+        "question": "Can I choose the gender of my therapist?( Male or Female)",
+        "answer": "Sure we have both female and male therapist and you can choose upon registration."
+      }
+    ],
+    "cta": {
+      "title": "Start Your Journey to <br className=\"hidden sm:block\" /> Pain-Free Mobility Today!",
+      "button": "Book An Appointment"
+    }
+  },
+  "galleryPage": {
+    "titleLine1": "DROGA PHYSIO LOOKBACK",
+    "titleLine2": "(GALLERY)",
+    "altText": "Gallery image",
+    "cta": {
+      "title": "Start Your Journey to <br className=\"hidden sm:block\" /> Pain-Free Mobility Today!",
+      "button": "Book An Appointment"
+    }
+  },
+  "newsPage": {
+    "hero": {
+      "subtitle": "Droga Physiotherapy",
+      "title": "News And<br />Insights"
+    },
+    "ticker": [
+      "Pain-Free Mobility",
+      "Geriatric Care",
+      "Sports Recovery",
+      "Pediatric Physio",
+      "Posture Correction",
+      "Manual Therapy",
+      "Dry Needling",
+      "Neuro Rehab"
+    ],
+    "featured": {
+      "subtitle": "Featured Story",
+      "button": "Read Full Article"
+    },
+    "categories": {
+      "all": "All",
+      "pain": "Pain Management",
+      "senior": "Senior Care",
+      "sports": "Sports",
+      "lifestyle": "Lifestyle",
+      "pediatric": "Pediatric"
+    },
+    "article": {
+      "readMore": "Read More",
+      "backToNews": "Back to News",
+      "allArticles": "All Articles",
+      "understanding": "Understanding the Condition",
+      "treatment": "Our Treatment Approach",
+      "share": "Share:",
+      "bookConsultation": "Book a Consultation",
+      "count": "article",
+      "countPlural": "articles",
+      "understandingDesc": "When dealing with this condition, it is critical to understand the underlying mechanics that lead to discomfort. Our evidence-based approach ensures that we not only address the symptoms but also the root cause. This involves a comprehensive assessment of your movement patterns, strength, and flexibility.",
+      "healingQuote": "Healing is a matter of time, but it is sometimes also a matter of opportunity. Our physiotherapy approach focuses on unlocking your body's natural healing potential.",
+      "treatmentDesc": "Treatment plans are highly individualized. We may utilize a combination of manual therapy, targeted therapeutic exercises, dry needling, and modalities such as ultrasound or electrical stimulation. The goal is always to restore function, improve mobility, and enhance your overall quality of life.",
+      "consistencyDesc": "Consistency is key. While in-clinic sessions are essential, we also emphasize the importance of home exercise programs. By actively participating in your recovery process outside the clinic, you significantly improve your long-term outcomes and reduce the risk of recurrence."
+    },
+    "noResults": {
+      "title": "?",
+      "desc": "No articles found for this search.",
+      "clear": "Clear Filters"
+    },
+    "articles": [
+      {
+        "id": 1,
+        "title": "Chronic Pain Relief",
+        "subtitle": "The Role of Physiotherapy in Chronic Pain Relief",
+        "date": "24 Oct 2025",
+        "category": "Pain Management",
+        "content": "Chronic pain affects millions worldwide. Our specialised therapists use evidence-based techniques—manual therapy, dry needling, and targeted exercise—to break the pain cycle and restore normal movement."
+      },
+      {
+        "id": 2,
+        "title": "Geriatric Therapy",
+        "subtitle": "How Geriatric Therapy Helps Seniors Stay Active & Independent",
+        "date": "23 Oct 2025",
+        "category": "Senior Care",
+        "content": "Aging doesn't mean slowing down. Our geriatric rehabilitation programme is tailored for older adults, improving balance, strength, and confidence in daily activities."
+      },
+      {
+        "id": 3,
+        "title": "Sports Injury Recovery",
+        "subtitle": "Recover Faster. Perform Better.",
+        "date": "23 Oct 2025",
+        "category": "Sports",
+        "content": "From sprained ankles to ACL tears, our sports physiotherapy specialists design progressive rehabilitation plans to get you back on the field stronger than ever."
+      },
+      {
+        "id": 4,
+        "title": "Posture Correction",
+        "subtitle": "Straighten Up: A Guide to Better Posture",
+        "date": "22 Oct 2025",
+        "category": "Lifestyle",
+        "content": "Poor posture is one of the leading causes of back and neck pain. Through targeted exercises and ergonomic guidance, we help you build lasting postural habits."
+      },
+      {
+        "id": 5,
+        "title": "Back Pain Relief Tips",
+        "subtitle": "Simple Daily Exercises to Manage Chronic Back Pain",
+        "date": "21 Oct 2025",
+        "category": "Pain Management",
+        "content": "Discover practical, at-home exercises recommended by our physiotherapists to reduce chronic back pain and improve spinal mobility in just 15 minutes a day."
+      },
+      {
+        "id": 6,
+        "title": "Clubfoot Management",
+        "subtitle": "Post-Surgical Recovery Tips",
+        "date": "24 Oct 2025",
+        "category": "Pediatric",
+        "content": "Early treatment plays a vital role in our children's healthy motor development. Pediatric therapy helps children achieve their full potential."
+      },
+      {
+        "id": 7,
+        "title": "Benefits of Pediatric Therapy",
+        "subtitle": "How Physiotherapy Helps Infants?",
+        "date": "23 Oct 2025",
+        "category": "Pediatric",
+        "content": "Pediatric therapy helps children reach their full potential. From fine to gross motor skills, we develop them all."
+      }
+    ],
+    "cta": {
+      "title": "Start Your Journey to <br className=\"hidden sm:block\" /> Pain-Free Mobility Today!",
+      "button": "Book An Appointment"
+    }
+  },
+  "blogPage": {
+    "hero": {
+      "subtitle": "Droga Physiotherapy",
+      "title": "Wellness And Pre-Therapy<br />Tips For Daily Life"
+    },
+    "bentoSection": {
+      "title": "Preventative Care Guides",
+      "subtitle": "Ergonomics & Lifestyle",
+      "cards": {
+        "desk": {
+          "title": "Master Your Desk Posture",
+          "content": "Sitting for hours puts immense pressure on your spine. Keep your screen at eye level, shoulders relaxed, and lower back supported. Ensure your feet are flat on the floor to maintain blood circulation and reduce lumbar strain."
+        },
+        "drive": {
+          "title": "Drive Pain-Free",
+          "content": "Adjust your seat so your knees are slightly bent. Keep your hands at 9 and 3 o'clock. Use a lumbar roll if your seat lacks support."
+        },
+        "stretch": {
+          "title": "3-Minute Stretch",
+          "content": "Incorporate quick standing back extensions and neck gentle rolls every two hours."
+        },
+        "eyes": {
+          "title": "The 20-20-20 Rule",
+          "content": "Every 20 mins, look 20 feet away for 20 seconds. This prevents neck craning caused by focusing strictly on screens."
+        }
+      }
+    },
+    "toolbox": {
+      "title": "At-Home Recovery Toolbox",
+      "subtitle": "Practical Methods",
+      "items": [
+        {
+          "title": "Ice vs. Heat",
+          "desc": "Ice limits blood flow to reduce acute swelling. Heat promotes blood flow to relax muscles. Never use heat on a fresh injury."
+        },
+        {
+          "title": "Foam Rolling",
+          "desc": "Release myofascial tightness in IT bands, calves, and upper back using slow, controlled pressure before and after workouts."
+        },
+        {
+          "title": "Epsom Salt Baths",
+          "desc": "Magnesium sulfate absorbed through the skin helps relax overworked muscles and loosen stiff joints after long days."
+        },
+        {
+          "title": "Active Recovery",
+          "desc": "Instead of total rest, try light walking, cycling, or swimming to promote nutrient-rich blood flow to recovering tissues."
+        }
+      ]
+    },
+    "timeline": {
+      "title": "A Healthy Daily Routine",
+      "subtitle": "Chronological Guide",
+      "items": [
+        {
+          "time": "07:00 AM",
+          "title": "The Wake-Up Stretch",
+          "desc": "Before leaping out of bed, gently bring your knees to your chest to stretch the lower back. Roll to your side before sitting up to avoid spinal compression right in the morning."
+        },
+        {
+          "time": "11:30 AM",
+          "title": "The Desk Reset",
+          "desc": "If you're desk-bound, stand up and walk around. Perform shoulder blade squeezes and chin tucks to counteract the modern 'forward-head' tech posture."
+        },
+        {
+          "time": "15:00 PM",
+          "title": "Hydration & Alignment",
+          "desc": "Dehydrated spinal discs lose their cushioning capability. Drink water throughout the afternoon, and check your ergonomic chair settings."
+        },
+        {
+          "time": "22:00 PM",
+          "title": "Optimal Sleeping Positions",
+          "desc": "Sleep on your back with a pillow under your knees, or on your side with a pillow between your legs. Avoid sleeping on your stomach, which twists the cervical spine."
+        }
+      ]
+    }
+  },
+  "contactPage": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone (Optional)",
+      "subject": "Subject",
+      "message": "Write Your Message",
+      "submit": "Send Message"
+    },
+    "header": {
+      "subtitle": "CONTACT",
+      "title": "Ready To Take The First Step Toward Better Health? Contact Us Today To Book An Appointment."
+    },
+    "locations": {
+      "lead": "Lead:",
+      "items": [
+        {
+          "name": "Arat Kilo",
+          "address": "Arat kilo Infront of Tourist Hotel",
+          "leadDoctor": "Emnet Worku Sime",
+          "phone": "+251115578906 / +251965757526"
+        },
+        {
+          "name": "Bole",
+          "address": "Bole Next to Japan Embassy",
+          "leadDoctor": "Lewam Mamo Tewab",
+          "phone": "+251965757523 / +251116687006"
+        },
+        {
+          "name": "Lebu Varnero",
+          "address": "Lebu Varnero Infront of Chanoly Noodles",
+          "leadDoctor": "Yared Tekelemariam Megersa",
+          "phone": "+251935999777"
+        },
+        {
+          "name": "Bel Air Kebena",
+          "address": "Droga Pediatric physiotherapy center",
+          "leadDoctor": "Tesfaye Woyesa Fano",
+          "phone": "+251940332122"
+        },
+        {
+          "name": "Summit",
+          "address": "Summit Safeway area",
+          "leadDoctor": "Kitachew H/Michael Tessema",
+          "phone": "+251965757523"
+        }
+      ]
+    }
+  },
+  "appointmentPage": {
+    "title": "Book Appointment",
+    "form": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone (Optional)",
+      "selectBranch": "Select Branch",
+      "message": "Write Your Message",
+      "submit": "Book An Appointment"
+    },
+    "map": {
+      "viewInMaps": "View In Maps",
+      "layers": "Layers",
+      "userLabel": "User",
+      "branches": [
+        {
+          "id": "arat-kilo",
+          "name": "Arat Kilo Branch",
+          "desc": "Infront of Tourist Hotel, Arat Kilo. Main center for routine physiotherapy."
+        },
+        {
+          "id": "bole",
+          "name": "Around The Former Japan Embassy",
+          "desc": "Our premium Bole branch located next to the Japan Embassy."
+        },
+        {
+          "id": "lebu",
+          "name": "Lebu Varnero",
+          "desc": "Lebu Varnero Infront of Chanoly Noodles. Specializing in sports recovery."
+        },
+        {
+          "id": "bel-air",
+          "name": "Droga Pediatric Center",
+          "desc": "From Addis View Hotel 200 meters. Dedicated to pediatric physiotherapy."
+        }
+      ]
+    }
+  }
 }

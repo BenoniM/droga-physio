@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import GoogleMapReact from 'google-map-react'
+import { useLanguage } from '../context/LanguageContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import pinSvg from '../assets/appointment/Pin.svg'
 
 export default function Appointment() {
+  const { t } = useLanguage()
   const [scrollY, setScrollY] = useState(0)
   const editorRef = useRef(null)
   
@@ -13,44 +15,17 @@ export default function Appointment() {
   const [activePin, setActivePin] = useState(null)
   const [mapType, setMapType] = useState('roadmap')
 
-  const branches = [
-    {
-      id: "arat-kilo",
-      name: "Arat Kilo Branch",
-      rating: "4.8",
-      users: "185",
-      desc: "Infront of Tourist Hotel, Arat Kilo. Main center for routine physiotherapy.",
-      lat: 9.0345, 
-      lng: 38.7634
-    },
-    {
-      id: "bole",
-      name: "Around The Former Japan Embassy",
-      rating: "5.0",
-      users: "243",
-      desc: "Our premium Bole branch located next to the Japan Embassy.",
-      lat: 8.9961, 
-      lng: 38.7891
-    },
-    {
-      id: "lebu",
-      name: "Lebu Varnero",
-      rating: "4.9",
-      users: "312",
-      desc: "Lebu Varnero Infront of Chanoly Noodles. Specializing in sports recovery.",
-      lat: 8.9554, 
-      lng: 38.7303
-    },
-    {
-      id: "bel-air",
-      name: "Droga Pediatric Center",
-      rating: "5.0",
-      users: "420",
-      desc: "From Addis View Hotel 200 meters. Dedicated to pediatric physiotherapy.",
-      lat: 9.0416, 
-      lng: 38.7753
-    }
+  const branchCoordinates = [
+    { lat: 9.0345, lng: 38.7634, rating: "4.8", users: "185" },
+    { lat: 8.9961, lng: 38.7891, rating: "5.0", users: "243" },
+    { lat: 8.9554, lng: 38.7303, rating: "4.9", users: "312" },
+    { lat: 9.0416, lng: 38.7753, rating: "5.0", users: "420" }
   ]
+
+  const branches = t.appointmentPage.map.branches.map((b, idx) => ({
+    ...b,
+    ...branchCoordinates[idx]
+  }))
 
   useEffect(() => {
     const fn = () => setScrollY(window.scrollY)
@@ -86,32 +61,32 @@ export default function Appointment() {
           <div className="flex flex-col xl:pr-6">
             
             <h1 className="text-2xl sm:text-3xl md:text-[2.2rem] lg:text-[2.6rem] xl:text-[2.8rem] font-medium leading-[1.3] text-[#111] mb-8 md:mb-12">
-              Book Appointment
+              {t.appointmentPage.title}
             </h1>
 
             <form className="w-full flex flex-col" onSubmit={(e) => e.preventDefault()}>
               
               <input 
                 type="text" 
-                placeholder="Full Name" 
+                placeholder={t.appointmentPage.form.name} 
                 className="w-full pb-3 mb-6 md:mb-10 text-[15px] xl:text-[17px] border-b border-[#E1DDE6] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
               
               <input 
                 type="email" 
-                placeholder="Email" 
+                placeholder={t.appointmentPage.form.email} 
                 className="w-full pb-3 mb-6 md:mb-10 text-[15px] xl:text-[17px] border-b border-[#E1DDE6] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
               
               <input 
                 type="text" 
-                placeholder="Phone (Optional)" 
+                placeholder={t.appointmentPage.form.phone} 
                 className="w-full pb-3 mb-6 md:mb-10 text-[15px] xl:text-[17px] border-b border-[#E1DDE6] placeholder-[#A29CA8] text-[#333] outline-none focus:border-[#745893] transition-colors bg-transparent font-light"
               />
               
               <div className="relative w-full mb-6 md:mb-10">
                 <select className="w-full pb-3 text-[15px] xl:text-[17px] border-b border-[#E1DDE6] text-[#A29CA8] outline-none focus:border-[#745893] transition-colors bg-transparent font-light appearance-none cursor-pointer">
-                  <option value="" disabled selected>Select Branch</option>
+                  <option value="" disabled selected>{t.appointmentPage.form.selectBranch}</option>
                   <option value="arat-kilo">Arat Kilo</option>
                   <option value="bole">Bole (Japan Embassy)</option>
                   <option value="lebu">Lebu Varnero</option>
@@ -150,7 +125,7 @@ export default function Appointment() {
                 <div 
                   ref={editorRef}
                   contentEditable
-                  data-placeholder="Write Your Message"
+                  data-placeholder={t.appointmentPage.form.message}
                   className="w-full p-4 md:p-5 outline-none bg-transparent font-sans text-[15px] text-[#333] min-h-[140px] md:min-h-[160px] cursor-text empty:before:content-[attr(data-placeholder)] empty:before:text-[#A29CA8]"
                 ></div>
               </div>
@@ -158,7 +133,7 @@ export default function Appointment() {
               {/* Submit Button */}
               <div>
                 <button type="submit" className="bg-[#FFF200] text-black font-semibold text-[13px] md:text-[13px] px-8 md:px-9 py-3.5 md:py-4 rounded-full flex items-center justify-center gap-3 hover:scale-[1.03] active:scale-95 transition-all w-full sm:w-[240px] shadow-sm">
-                  Book An Appointment
+                  {t.appointmentPage.form.submit}
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
@@ -215,7 +190,7 @@ export default function Appointment() {
               rel="noopener noreferrer"
               className="absolute top-4 md:top-6 left-4 md:left-6 bg-[#745893] text-white text-[12px] md:text-[13px] font-medium px-4 md:px-5 py-2.5 md:py-3 rounded flex items-center gap-2 hover:bg-[#5b4375] transition shadow-md z-10 tracking-wide"
             >
-              View In Maps
+              {t.appointmentPage.map.viewInMaps}
               <svg width="12" height="12" md:width="14" md:height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
@@ -237,9 +212,9 @@ export default function Appointment() {
                   <svg width="8" height="8" md:width="10" md:height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
                     <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
+                    <polyline points="2-12 12 17 22 12"></polyline>
                   </svg>
-                  <span className="text-[9px] md:text-[10px] font-bold tracking-wide">Layers</span>
+                  <span className="text-[9px] md:text-[10px] font-bold tracking-wide">{t.appointmentPage.map.layers}</span>
                 </div>
               </div>
             </div>
@@ -300,7 +275,7 @@ const CustomPin = ({ lat, lng, data, isActive, $hover, onClick }) => {
             <div className="flex text-[#FFF200] text-[12px] md:text-[13px] tracking-widest gap-0.5">
               <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
-            <span>{data.rating} <span className="font-light text-gray-400 text-[10px] md:text-[11px] ml-0.5">({data.users} User)</span></span>
+            <span>{data.rating} <span className="font-light text-gray-400 text-[10px] md:text-[11px] ml-0.5">({data.users} {useLanguage().t.appointmentPage.map.userLabel})</span></span>
           </div>
           
           <p className="text-[#888] text-[10px] md:text-[11px] leading-relaxed">

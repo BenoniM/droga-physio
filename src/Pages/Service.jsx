@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -8,14 +9,13 @@ import CtaBgImg from '../assets/about/cta_background.png'
 import gsap from 'gsap'
 
 // Import 12 specialized service images
-import Serv1 from '../assets/serv/IMG_3640.JPG'
+import Serv1 from '../assets/serv/IMG_3638.jpg'
 import Serv2 from '../assets/serv/IMG_3640.JPG'
 import Serv3 from '../assets/serv/IMG_3660.JPG'
 import Serv4 from '../assets/serv/anthony-soberal-IVXtVwMRJY0-unsplash.jpg'
 import Serv5 from '../assets/serv/chidy-young-a-Ml4ndeqos-unsplash.jpg'
 import Serv6 from '../assets/serv/Gemini_Generated_Image_ez5a9yez5a9yez5a.png'
 import Serv7 from '../assets/serv/nexa-black-UK8S5JAf6XE-unsplash.jpg'
-
 import Serv8 from '../assets/serv/photo_2026-03-27_09-28-57.jpg'
 import Serv9 from '../assets/serv/photo_2026-03-27_11-05-13.jpg'
 import Serv10 from '../assets/serv/tobias-nii-kwatei-quartey-eGdGkZAI6h4-unsplash.jpg'
@@ -29,6 +29,7 @@ const baseSizes = Array.from({ length: BUBBLE_COUNT }, (_, i) => {
 })
 
 function Service() {
+    const { t } = useLanguage()
     const heroRef = useRef(null)
     const targetRef = useRef({ x: -1000, y: -1000 })
     const historyRef = useRef(Array(BUBBLE_COUNT).fill({ x: -1000, y: -1000 }))
@@ -66,63 +67,63 @@ function Service() {
 
     const services = [
         {
-            title: "Pain Management and Relief",
-            description: "Chronic Back and Neck Pain, Joint Pain (Shoulder, Knee, Hip), Headache and Migraine Relief.",
+            title: t.servicePage.services[0].title,
+            description: t.servicePage.services[0].description,
             image: Serv1
         },
         {
-            title: "Injury Rehabilitation",
-            description: "Sports Injuries, Post-Surgical Rehabilitation, Work-Related Injuries, Motor Vehicle Accident Recovery.",
+            title: t.servicePage.services[1].title,
+            description: t.servicePage.services[1].description,
             image: Serv2
         },
         {
-            title: "Neurological Rehabilitation",
-            description: "Regain strength, balance, and coordination to improve independence after a stroke.",
+            title: t.servicePage.services[2].title,
+            description: t.servicePage.services[2].description,
             image: Serv3
         },
         {
-            title: "Strength and Conditioning",
-            description: "Muscle Imbalance Correction, Core Strengthening, Pre- and Post-Natal Care.",
+            title: t.servicePage.services[3].title,
+            description: t.servicePage.services[3].description,
             image: Serv4
         },
         {
-            title: "Specialized Programs",
-            description: "Arthritis Management, Balance and Fall Prevention, Vestibular Rehabilitation (for Vertigo).",
+            title: t.servicePage.services[4].title,
+            description: t.servicePage.services[4].description,
             image: Serv5
         },
         {
-            title: "Mobility and Movement Restoration",
-            description: "Gait Analysis and Re-training, Restoring Range of Motion.",
+            title: t.servicePage.services[5].title,
+            description: t.servicePage.services[5].description,
             image: Serv6
         },
         {
-            title: "Gross Motor Skills Development",
-            description: "Milestone Achievement: Helping infants and toddlers reach key motor milestones.",
+            title: t.servicePage.services[6].title,
+            description: t.servicePage.services[6].description,
             image: Serv7
         },
         {
-            title: "Neuro Developmental Support",
-            description: "Cerebral Palsy Management, Torticollis and Plagiocephaly, Genetic Condition Support.",
+            title: t.servicePage.services[7].title,
+            description: t.servicePage.services[7].description,
             image: Serv8
         },
         {
-            title: "Rehabilitation and Injury Care",
-            description: "Sports Injury Rehab, Post-Surgical Recovery, Bracing and Equipment Assessment.",
+            title: t.servicePage.services[8].title,
+            description: t.servicePage.services[8].description,
             image: Serv9
         },
         {
-            title: "Fine Motor and School Skills",
-            description: "Handwriting Improvement, Scissor Skills and Tool Use, Sensory Processing.",
+            title: t.servicePage.services[9].title,
+            description: t.servicePage.services[9].description,
             image: Serv10
         },
         {
-            title: "Activities of Daily Living (ADLs)",
-            description: "Self-Care Independence, Organization and Executive Functioning, Play Skills Development.",
+            title: t.servicePage.services[10].title,
+            description: t.servicePage.services[10].description,
             image: Serv11
         },
         {
-            title: "Regulation and Behavior",
-            description: "Emotional Regulation, Focus and Attention, ADHD support.",
+            title: t.servicePage.services[11].title,
+            description: t.servicePage.services[11].description,
             image: Serv12
         }
     ]
@@ -297,51 +298,51 @@ function Service() {
 
     const branches = [
         {
-            name: "Bole Branch",
+            name: t.servicePage.branches.bole,
             services: [
-                "Mobility and Movement Restoration",
-                "Strength and Conditioning",
-                "Injury Rehabilitation",
-                "Specialized Programs",
-                "Neurological Rehabilitation",
-                "Pain Management and Relief"
+                t.servicePage.services[5].title,
+                t.servicePage.services[3].title,
+                t.servicePage.services[1].title,
+                t.servicePage.services[4].title,
+                t.servicePage.services[2].title,
+                t.servicePage.services[0].title
             ]
         },
         {
-            name: "4 Kilo Branch",
+            name: t.servicePage.branches['4kilo'],
             services: [
-                "Mobility and Movement Restoration",
-                "Strength and Conditioning",
-                "Injury Rehabilitation",
-                "Specialized Programs",
-                "Neurological Rehabilitation",
-                "Pain Management and Relief"
+                t.servicePage.services[5].title,
+                t.servicePage.services[3].title,
+                t.servicePage.services[1].title,
+                t.servicePage.services[4].title,
+                t.servicePage.services[2].title,
+                t.servicePage.services[0].title
             ]
         },
         {
-            name: "Kebena Branch (Pediatric)",
+            name: t.servicePage.branches.qebena,
             services: [
-                "Gross Motor Skills Development",
-                "Neurodevelopmental Support",
-                "Rehabilitation and Injury Care",
-                "Fine Motor and School Skills",
-                "Activities of Daily Living (ADLs)",
-                "Regulation and Behavior"
+                t.servicePage.services[6].title,
+                t.servicePage.services[7].title,
+                t.servicePage.services[8].title,
+                t.servicePage.services[9].title,
+                t.servicePage.services[10].title,
+                t.servicePage.services[11].title
             ]
         },
         {
-            name: "Lebu Branch",
+            name: t.servicePage.branches.lebu,
             services: [
-                "Mobility and Movement Restoration",
-                "Strength and Conditioning",
-                "Injury Rehabilitation",
-                "Specialized Programs",
-                "Neurological Rehabilitation",
-                "Pain Management and Relief"
+                t.servicePage.services[5].title,
+                t.servicePage.services[3].title,
+                t.servicePage.services[1].title,
+                t.servicePage.services[4].title,
+                t.servicePage.services[2].title,
+                t.servicePage.services[0].title
             ]
         },
         {
-            name: "Summit Branch",
+            name: t.servicePage.branches.summit,
             services: []
         }
     ]
@@ -382,7 +383,7 @@ function Service() {
                     <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
                         <div className="h-[1px] bg-[#FFF200]/60 w-20" />
                         <span className="text-[#FFF200] font-medium tracking-[0.3em] text-sm uppercase">
-                            Droga Physiotherapy
+                            {t.servicePage.hero.subtitle}
                         </span>
                         <div className="h-[1px] bg-[#FFF200]/60 w-20" />
                     </div>
@@ -390,9 +391,8 @@ function Service() {
                     <h1
                         className="max-w-6xl md:font-semibold text-[#F7F7F5] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,5.5vw,3rem)] leading-[0.9] uppercase animate-fade-up"
                         style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-                    >
-                        Explore our range of specialized services <br /> designed to meet your unique needs
-                    </h1>
+                        dangerouslySetInnerHTML={{ __html: t.servicePage.hero.title }}
+                    />
                 </div>
 
                 {/* Top reveal layer — image on hover */}
@@ -418,7 +418,7 @@ function Service() {
                         <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
                             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
                             <span className="text-[#F7F7F5] font-medium tracking-[0.3em] text-sm uppercase">
-                                Droga Physiotherapy
+                                {t.servicePage.hero.subtitle}
                             </span>
                             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
                         </div>
@@ -426,9 +426,8 @@ function Service() {
                         <h1
                             className="max-w-6xl md:font-semibold text-[#FFF200] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,5.5vw,3rem)] leading-[0.9] uppercase animate-fade-up"
                             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-                        >
-                            Explore our range of specialized services <br /> designed to meet your unique needs
-                        </h1>
+                            dangerouslySetInnerHTML={{ __html: t.servicePage.hero.title }}
+                        />
                     </div>
                 </div>
             </section>
@@ -440,10 +439,10 @@ function Service() {
                         key={activeServiceIndex + "-title"}
                         className="text-[#745893] text-[clamp(1.5rem,6vw,2.5rem)] leading-[1.1] max-w-4xl animate-in fade-in slide-in-from-left-8 duration-700 font-semibold"
                     >
-                        {services[activeServiceIndex].title.split(' and ').map((part, i, arr) => (
+                        {services[activeServiceIndex].title.split(t.servicePage.interactive.splitBy).map((part, i, arr) => (
                             <span key={i}>
                                 {part}
-                                {i < arr.length - 1 && <span> And </span>}
+                                {i < arr.length - 1 && <span>{t.servicePage.interactive.and}</span>}
                             </span>
                         ))}
                     </h2>
@@ -495,7 +494,7 @@ function Service() {
             {/* BRANCH SERVICES SECTION - INFINITE 3D COVERFLOW */}
             <section className="bg-[#745893] py-2 md:py-4 px-6 md:px-12 overflow-hidden relative flex flex-col items-center justify-center min-h-[85vh] md:min-h-[80vh]">
                 <div className="flex flex-col items-center gap-0 mb-2">
-                    <h3 className="text-white text-2xl md:text-3xl font-semibold uppercase leading-tight">Our Services</h3>
+                    <h3 className="text-white text-2xl md:text-3xl font-semibold uppercase leading-tight">{t.servicePage.branchServices.title}</h3>
                 </div>
 
                 {/* ── THE COVERFLOW STACK ────────────────────────────────────────── */}
@@ -560,14 +559,14 @@ function Service() {
                         </p>
 
                         <div className="flex flex-wrap justify-center gap-3 mt-4">
-                            <span className="text-[#FFF200] uppercase text-[10px] tracking-widest font-bold w-full mb-2">Available At:</span>
+                            <span className="text-[#FFF200] uppercase text-[10px] tracking-widest font-bold w-full mb-2">{t.servicePage.branchServices.availableAt}</span>
                             {branches.filter(b => b.services.includes(services[activeLocationServiceIdx].title)).map((branch, bIdx) => (
                                 <div key={bIdx} className="px-5 py-2 rounded-full border border-white/20 bg-white/5 text-white/80 text-sm font-medium backdrop-blur-sm">
                                     {branch.name}
                                 </div>
                             ))}
                             {branches.filter(b => b.services.includes(services[activeLocationServiceIdx].title)).length === 0 && (
-                                <span className="text-white/30 italic text-sm">Consultation at all branches.</span>
+                                <span className="text-white/30 italic text-sm">{t.servicePage.branchServices.consultationAll}</span>
                             )}
                         </div>
                     </div>
@@ -633,12 +632,13 @@ function Service() {
 
                 {/* Content */}
                 <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-                    <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
-                        Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
-                    </h2>
+                    <h2 
+                        className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12"
+                        dangerouslySetInnerHTML={{ __html: t.servicePage.cta.title }}
+                    />
 
                     <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
-                        Book An Appointment
+                        {t.servicePage.cta.button}
                         <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                             <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>

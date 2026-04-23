@@ -248,47 +248,46 @@ function Navbar({ scrollY, isLightBg: propIsLightBg }) {
             </div>
           </div>
 
-          {/* Language Toggle - Absolutely positioned to the right of the glass nav, vertically centered */}
-          <div className="hidden lg:block absolute right-[-12px] translate-x-full top-1/2 -translate-y-1/2">
-            <button
-              onClick={handleLanguageToggle}
-              className="group relative overflow-hidden w-15 h-15 rounded-full border flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:!bg-[#FFF200] hover:!text-black hover:!border-transparent"
-              style={{
-                borderColor: linkColor,
-                color: linkColor,
-                backgroundColor: isLightBg ? 'rgba(247,247,245,0.8)' : 'rgba(116,88,147,0.3)',
-                '--sx': `${langAnim.startX}px`,
-                '--sy': `${langAnim.startY}px`
-              }}
-            >
-              {/* Outgoing Language */}
-              {langAnim.animating && (
-                <span 
-                  className="absolute leading-none" 
-                  style={{ 
-                    animation: 'slideOut 0.4s ease-in forwards',
-                    fontFamily: langAnim.prevLang === 'en' ? 'AmharicFont' : 'Delight',
-                    fontWeight: langAnim.prevLang === 'en' ? '400' : '700'
-                  }}
-                >
-                  {langAnim.prevLang === 'en' ? 'አማ' : 'EN'}
-                </span>
-              )}
-              
-              {/* Incoming Language */}
-              <span 
-                key={language} 
-                className="absolute leading-none" 
-                style={{ 
-                  animation: langAnim.animating ? 'slideIn 0.4s ease-out forwards' : 'none',
-                  fontFamily: language === 'en' ? 'AmharicFont' : 'Delight',
-                  fontWeight: language === 'en' ? '400' : '700'
-                }}
-              >
-                {language === 'en' ? 'አማ' : 'EN'}
-              </span>
-            </button>
-          </div>
+{/* Language Toggle - Absolutely positioned to the right of the glass nav, vertically centered */}
+<div className="hidden lg:block absolute right-[-12px] translate-x-full top-1/2 -translate-y-1/2">
+  <button
+    onClick={handleLanguageToggle}
+    className="group relative overflow-hidden w-15 h-15 rounded-full border border-transparent text-black flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg"
+    style={{
+      backgroundColor: '#FFF200',
+      color: '#000000',
+      '--sx': `${langAnim.startX}px`,
+      '--sy': `${langAnim.startY}px`
+    }}
+  >
+    {/* Outgoing Language */}
+    {langAnim.animating && (
+      <span 
+        className="absolute leading-none" 
+        style={{ 
+          animation: 'slideOut 0.4s ease-in forwards',
+          fontFamily: langAnim.prevLang === 'en' ? 'AmharicFont' : 'Delight',
+          fontWeight: langAnim.prevLang === 'en' ? '400' : '700'
+        }}
+      >
+        {langAnim.prevLang === 'en' ? 'አማ' : 'EN'}
+      </span>
+    )}
+    
+    {/* Incoming Language */}
+    <span 
+      key={language} 
+      className="absolute leading-none" 
+      style={{ 
+        animation: langAnim.animating ? 'slideIn 0.4s ease-out forwards' : 'none',
+        fontFamily: language === 'en' ? 'AmharicFont' : 'Delight',
+        fontWeight: language === 'en' ? '400' : '700'
+      }}
+    >
+      {language === 'en' ? 'አማ' : 'EN'}
+    </span>
+  </button>
+</div>
         </div>
 
         {/* Mobile Menu Backdrop */}

@@ -70,7 +70,7 @@ const Footer = () => {
                       <a href="https://drogapharma.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">Droga Pharma PLC</a>
                       <a href="https://www.emaethiopia.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">EMA Import and Export Pvt.Ltd</a>
                       <a href="https://drogaconsulting.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">Droga Consulting</a>
-                      <a href="https://www.trustethiopharma.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">Trust Pharmaceutical Manufacturing PLC</a>
+                      <div className="cursor-pointer hover:text-[#FFF200] transition-colors">Trust Pharmaceutical Manufacturing PLC</div>
                       <a href="https://drogapharmacy.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">Droga Pharmacy</a>
                       <a href="https://orbittena.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">Orbit Speciality Eye Clinic</a>
                       <a href="https://breezepharmatech.com/" target="_blank" rel="noopener noreferrer" className="cursor-pointer hover:text-[#FFF200] transition-colors">Breeze Pharmaceutical Technologies PLC</a>

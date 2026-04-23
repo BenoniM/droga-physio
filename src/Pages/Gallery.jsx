@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -20,6 +21,7 @@ const images = Object.values(imageGlob).map((m) => m?.default).filter(Boolean);
 
 
 export default function Gallery() {
+  const { t } = useLanguage();
   const containerRef   = useRef(null);
   const trackRef       = useRef(null);
   const timelineBarRef = useRef(null);
@@ -130,9 +132,9 @@ export default function Gallery() {
   const onPointerUp = useCallback(() => { drag.current.active = false; }, []);
 
   return (
-    <div className="bg-[#F7F7F5] text-[#333] font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#F7F7F5] text-[#333] overflow-x-hidden">
       <div className="fixed top-0 left-0 w-full z-200">
-        <Navbar scrollY={scrollY} isLightBg={true} />
+        <Navbar scrollY={scrollY} />
       </div>
 
       <div ref={containerRef} className="relative h-screen w-full flex items-center overflow-hidden">
@@ -143,8 +145,8 @@ export default function Gallery() {
                     style={{ mixBlendMode: 'difference' }}
                 >
                     <h1 className="gap-2 flex flex-col uppercase text-center" style={{ color: '#745893' }}>
-                        <span className="text-2xl sm:text-3xl md:text-5xl">DROGA PHYSIO LOOKBACK</span>
-                        <span className="text-lg sm:text-lg md:text-3xl tracking-widest">(GALLERY)</span>
+                        <span className="text-2xl sm:text-3xl md:text-5xl">{t.galleryPage.titleLine1}</span>
+                        <span className="text-lg sm:text-lg md:text-3xl tracking-widest">{t.galleryPage.titleLine2}</span>
                     </h1>
                 </div>
 
@@ -162,7 +164,7 @@ export default function Gallery() {
             ];
             return (
               <div key={idx} className={`relative flex-shrink-0 z-20 hover:z-30 md:hover:scale-105 transition-transform duration-500 shadow-2xl ${aligns[idx % aligns.length]} ${widths[idx % widths.length]}`}>
-                <img src={src} alt={`Gallery image ${idx + 1}`} className="w-full h-auto object-cover object-center max-h-[65vh] md:max-h-[60vh] rounded-sm" />
+                <img src={src} alt={`${t.galleryPage.altText} ${idx + 1}`} className="w-full h-auto object-cover object-center max-h-[65vh] md:max-h-[60vh] rounded-sm" />
               </div>
             );
           })}
@@ -212,12 +214,13 @@ export default function Gallery() {
 
           {/* Content */}
           <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-              <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
-                  Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
-              </h2>
+              <h2 
+                  className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12"
+                  dangerouslySetInnerHTML={{ __html: t.galleryPage.cta.title }}
+              />
 
               <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
-                  Book An Appointment
+                  {t.galleryPage.cta.button}
                   <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                       <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>

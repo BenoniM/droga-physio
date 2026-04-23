@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -68,6 +69,7 @@ const baseSizes = Array.from({ length: BUBBLE_COUNT }, (_, i) => {
 })
 
 function About() {
+    const { t } = useLanguage()
     const heroRef = useRef(null)
     const targetRef = useRef({ x: -1000, y: -1000 })
     const historyRef = useRef(Array(BUBBLE_COUNT).fill({ x: -1000, y: -1000 }))
@@ -332,41 +334,41 @@ function About() {
 
     const EXPERTS_DATA = [
         {
-            name: "Nebiyou Tesfaye Haile",
-            title: "Physiotherapy Director",
+            name: t.aboutPage.experts.names.nebiyou,
+            title: t.aboutPage.experts.roles.director,
             image: NebiyouImg,
-            branch: "Headquarters",
+            branch: t.aboutPage.experts.branches.headquarters,
             isHead: true,
         },
         {
-            name: "Lewam Mamo Tewabe",
-            title: "Bole Physiotherapy Clinic Branch Manager",
+            name: t.aboutPage.experts.names.lewam,
+            title: t.aboutPage.experts.roles.managerBole,
             image: LewamImg,
-            branch: "Bole Branch"
+            branch: t.aboutPage.experts.branches.bole
         },
         {
-            name: "Emnet Worku Sime",
-            title: "4 Kilo Physiotherapy Clinic Branch Manager",
+            name: t.aboutPage.experts.names.emnet,
+            title: t.aboutPage.experts.roles.manager4Kilo,
             image: EmnetImg,
-            branch: "4 Kilo Branch"
+            branch: t.aboutPage.experts.branches['4kilo']
         },
         {
-            name: "Tesfaye Woyesa Fano",
-            title: "Qebena Physiotherapy Clinic Branch Manager",
+            name: t.aboutPage.experts.names.tesfaye,
+            title: t.aboutPage.experts.roles.managerQebena,
             image: TesfaImg,
-            branch: "Qebena Branch"
+            branch: t.aboutPage.experts.branches.qebena
         },
         {
-            name: "Yared Tekelemariam Megersa",
-            title: "Lebu Physiotherapy Clinic Branch Manager",
+            name: t.aboutPage.experts.names.yared,
+            title: t.aboutPage.experts.roles.managerLebu,
             image: YaredImg,
-            branch: "Lebu Branch"
+            branch: t.aboutPage.experts.branches.lebu
         },
         {
-            name: "Kitachew H/Michael Tessema",
-            title: "Summit Physiotherapy Clinic Branch Manager",
+            name: t.aboutPage.experts.names.kitachew,
+            title: t.aboutPage.experts.roles.managerSummit,
             image: KitaImg,
-            branch: "Summit Branch"
+            branch: t.aboutPage.experts.branches.summit
         }
     ]
 
@@ -412,7 +414,7 @@ function About() {
                     <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
                         <div className="h-[1px] bg-[#FFF200]/60 w-20" />
                         <span className="text-[#FFF200] font-medium tracking-[0.3em] text-sm uppercase">
-                            Droga Physiotherapy
+                            {t.aboutPage.hero.subtitle}
                         </span>
                         <div className="h-[1px] bg-[#FFF200]/60 w-20" />
                     </div>
@@ -420,9 +422,8 @@ function About() {
                     <h1
                         className="max-w-6xl text-[#F7F7F5] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(2.5rem,5.5vw,4rem)] md:font-semibold leading-[0.9] uppercase animate-fade-up"
                         style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-                    >
-                        Discover our mission to provide exceptional <br /> physiotherapy services
-                    </h1>
+                        dangerouslySetInnerHTML={{ __html: t.aboutPage.hero.title }}
+                    />
                 </div>
 
                 {/* Top reveal layer — image on hover */}
@@ -448,7 +449,7 @@ function About() {
                         <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
                             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
                             <span className="text-[#F7F7F5] font-medium tracking-[0.3em] text-sm uppercase">
-                                Droga Physiotherapy
+                                {t.aboutPage.hero.subtitle}
                             </span>
                             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
                         </div>
@@ -456,9 +457,8 @@ function About() {
                         <h1
                             className="max-w-6xl md:font-semibold text-[#FFF200] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(2.5rem,5.5vw,4rem)] leading-[0.9] uppercase animate-fade-up"
                             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-                        >
-                            Discover our mission to provide exceptional <br /> physiotherapy services
-                        </h1>
+                            dangerouslySetInnerHTML={{ __html: t.aboutPage.hero.title }}
+                        />
                     </div>
                 </div>
             </section>
@@ -475,20 +475,21 @@ function About() {
                                     <div className="w-2 h-2 bg-[#F7F7F5] rotate-45 -mr-1"></div>
                                 </div>
 
-                                <span className="text-[#FFF200] font-medium tracking-widest text-base md:text-lg uppercase whitespace-nowrap">About Us</span>
+                                <span className="text-[#FFF200] font-medium tracking-widest text-base md:text-lg uppercase whitespace-nowrap">{t.aboutPage.aboutUs.subtitle}</span>
                             </div>
 
-                            <h2 className="text-[#F7F7F5] text-3xl sm:text-4xl md:text-5xl lg:text-[3.2vw] xl:text-[3.8rem] leading-[1.1] uppercase mt-2 md:-mt-4">
-                                Droga <br/> Physiotherapy
-                            </h2>
+                            <h2 
+                                className="text-[#F7F7F5] text-3xl sm:text-4xl md:text-5xl lg:text-[3.2vw] xl:text-[3.8rem] leading-[1.1] uppercase mt-2 md:-mt-4"
+                                dangerouslySetInnerHTML={{ __html: t.aboutPage.aboutUs.title }}
+                            />
                         </div>
 
                         <div className="flex flex-col gap-6 md:gap-8 mt-6 md:mt-4 text-sm md:text-base">
                             <p className="text-[#F7F7F5]/90 leading-relaxed max-w-2xl">
-                                Droga Physiotherapy Specialty Clinic was established in 2015 in Addis Ababa by a group of health care professionals, who have an interest in developing the scientific back ground of physiotherapy in Ethiopia.
+                                {t.aboutPage.aboutUs.desc1}
                             </p>
                             <p className="text-[#F7F7F5]/90 leading-relaxed max-w-2xl">
-                                We are striving to increase the number of branches in the capital and regional cities. Currently the clinic is serving the community with its two branches located in Addis Ababa Arat kilo next to tourist hotel and Around the former Japan Embassy.
+                                {t.aboutPage.aboutUs.desc2}
                             </p>
                         </div>
                     </div>
@@ -515,7 +516,7 @@ function About() {
                     <div className="flex flex-col items-end text-right gap-4 md:gap-6">
                         <div className="flex items-center gap-4 w-full">
                             <div className="flex items-center flex-1 justify-end gap-3 md:gap-4">
-                                <span className="text-[#FFF200] font-medium tracking-widest text-base md:text-lg uppercase whitespace-nowrap">Accreditation</span>
+                                <span className="text-[#FFF200] font-medium tracking-widest text-base md:text-lg uppercase whitespace-nowrap">{t.aboutPage.accreditation.subtitle}</span>
                                 <div className="flex items-center">
                                     <div className="w-2 h-2 bg-[#F7F7F5] rotate-45 -mr-1"></div>
                                     <div className="h-[1.25px] bg-[#F7F7F5] w-12 sm:w-20 md:w-32 lg:w-48"></div>
@@ -523,12 +524,13 @@ function About() {
                             </div>
                         </div>
 
-                        <h2 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-[3vw] xl:text-[3rem] leading-[1.1] md:leading-[0.9] uppercase max-w-4xl">
-                            Our Accreditation. Nationally
-                        </h2>
+                        <h2 
+                            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-[3vw] xl:text-[3rem] leading-[1.1] md:leading-[0.9] uppercase max-w-4xl"
+                            dangerouslySetInnerHTML={{ __html: t.aboutPage.accreditation.title }}
+                        />
 
                         <p className="text-[#F7F7F5]/90 text-sm md:text-base leading-relaxed max-w-2xl">
-                            We take pride in being nationally accredited for maintaining the highest standards of physiotherapy care and patient satisfaction.
+                            {t.aboutPage.accreditation.desc}
                         </p>
                     </div>
 
@@ -546,7 +548,7 @@ function About() {
                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <StatValue value="90%" />
                                 <span className="text-[#FFF200] font-bold tracking-[0.2em] text-base md:text-lg uppercase mt-2">
-                                    Treatment
+                                    {t.aboutPage.accreditation.stats.treatment}
                                 </span>
                             </div>
                         </div>
@@ -562,7 +564,7 @@ function About() {
                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <StatValue value="15+" />
                                 <span className="text-[#FFF200] font-bold tracking-[0.2em] text-base md:text-lg uppercase mt-2">
-                                    Service
+                                    {t.aboutPage.accreditation.stats.service}
                                 </span>
                             </div>
                         </div>
@@ -578,7 +580,7 @@ function About() {
                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <StatValue value="40+" />
                                 <span className="text-[#FFF200] font-bold tracking-[0.2em] text-base md:text-lg uppercase mt-2">
-                                    Therapist
+                                    {t.aboutPage.accreditation.stats.therapist}
                                 </span>
                             </div>
                         </div>
@@ -594,7 +596,7 @@ function About() {
                             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <StatValue value="80%" />
                                 <span className="text-[#FFF200] font-bold tracking-[0.2em] text-base md:text-lg uppercase mt-2">
-                                    Facilities
+                                    {t.aboutPage.accreditation.stats.facilities}
                                 </span>
                             </div>
                         </div>
@@ -643,7 +645,7 @@ function About() {
                     <div className="h-[1px] bg-[#FFF200] w-full"></div>
                     <div className="flex justify-end mt-4">
                         <p className="text-white/90 text-sm md:text-lg leading-[1.6] text-right">
-                        Continuing to be quality driven clinic in Ethiopia while providing high quality, effective, and affordable services.
+                        {t.aboutPage.missionVision.missionDesc1}
                         </p>
                     </div>
                     </div>
@@ -667,11 +669,12 @@ function About() {
 
                     <div className="flex flex-col order-1 md:order-2 items-end w-full md:w-auto">
                         <span className="text-[#FFF200] font-medium tracking-[0.2em] text-xs md:text-sm uppercase mb-2 text-right">
-                        Service / Future Focus
+                        {t.aboutPage.missionVision.visionSubtitle}
                         </span>
-                        <h2 className="text-white text-[3.5rem] sm:text-[4.5rem] md:text-[clamp(4.5rem,10vw,5rem)] leading-[1.0] uppercase text-right opacity-90">
-                        Our<br />Vision
-                        </h2>
+                        <h2 
+                            className="text-white text-[3.5rem] sm:text-[4.5rem] md:text-[clamp(4.5rem,10vw,5rem)] leading-[1.0] uppercase text-right opacity-90"
+                            dangerouslySetInnerHTML={{ __html: t.aboutPage.missionVision.visionTitle }}
+                        />
                     </div>
                     </div>
 
@@ -679,7 +682,7 @@ function About() {
                     <div className="h-[1px] bg-[#FFF200] w-full"></div>
                     <div className="flex justify-start mt-4">
                         <p className="text-white/90 text-sm md:text-lg leading-[1.6] text-left">
-                        To be Ethiopia’s leading physiotherapy and rehabilitation provider, transforming lives through excellence in movement and care.
+                        {t.aboutPage.missionVision.visionDesc}
                         </p>
                     </div>
                     </div>
@@ -713,7 +716,7 @@ function About() {
                     <div className="h-[1px] bg-[#FFF200] w-full"></div>
                     <div className="flex justify-end mt-4">
                         <p className="text-white/90 text-sm md:text-lg leading-[1.6] text-right">
-                        We deliver evidence-based, patient-centered physiotherapy services that restore function, reduce pain, and enhance quality of life through skilled professionals and innovative rehabilitation solutions.
+                        {t.aboutPage.missionVision.missionDesc2}
                         </p>
                     </div>
                     </div>
@@ -729,12 +732,12 @@ function About() {
                     <div className="flex items-center gap-4 mb-4 md:mb-6">
                         <div className="h-[1px] bg-white/40 w-12 md:w-20" />
                         <span className="text-white/80 font-medium tracking-[0.3em] text-[10px] md:text-xs uppercase">
-                            Core Beliefs
+                            {t.aboutPage.values.subtitle}
                         </span>
                         <div className="h-[1px] bg-white/40 w-12 md:w-20" />
                     </div>
                     <h2 className="text-white text-4xl sm:text-5xl md:text-[clamp(3rem,10vw,3rem)] leading-none uppercase text-center font-bold">
-                        Our Values
+                        {t.aboutPage.values.title}
                     </h2>
                 </div>
 
@@ -761,20 +764,20 @@ function About() {
 
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-[#745893] text-xl md:text-2xl uppercase font-bold">
-                                    03 / Care
+                                    {t.aboutPage.values.cards[2].title}
                                 </h3>
                                 <div className="text-[#745893]/80 text-base md:text-lg leading-relaxed font-regular">
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Care For Us (Employee and Terms)
+                                        {t.aboutPage.values.cards[2].points[0]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Care For Community
+                                        {t.aboutPage.values.cards[2].points[1]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Care For The Planet
+                                        {t.aboutPage.values.cards[2].points[2]}
                                     </p>
                                 </div>
                             </div>
@@ -793,20 +796,20 @@ function About() {
 
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-[#745893] md:group-hover:text-[#745893] transition-colors duration-300 text-xl md:text-2xl uppercase font-bold">
-                                    01 / Integrity
+                                    {t.aboutPage.values.cards[0].title}
                                 </h3>
                                 <div className="text-[#745893]/80 md:text-[#745893]/80 text-base md:text-lg leading-relaxed font-regular">
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Do The Right Thing
+                                        {t.aboutPage.values.cards[0].points[0]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Walk The Talk
+                                        {t.aboutPage.values.cards[0].points[1]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Foster Sound Decisions
+                                        {t.aboutPage.values.cards[0].points[2]}
                                     </p>
                                 </div>
                             </div>
@@ -825,20 +828,20 @@ function About() {
 
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-[#745893] md:group-hover:text-[#745893] transition-colors duration-300 text-xl md:text-2xl uppercase font-bold">
-                                    02 / Customer Centric
+                                    {t.aboutPage.values.cards[1].title}
                                 </h3>
                                 <div className="text-[#745893]/80 md:text-[#745893]/80 text-base md:text-lg leading-relaxed font-regular">
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Listen First
+                                        {t.aboutPage.values.cards[1].points[0]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Go The Extra Mile
+                                        {t.aboutPage.values.cards[1].points[1]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Innovate To Add Value
+                                        {t.aboutPage.values.cards[1].points[2]}
                                     </p>
                                 </div>
                             </div>
@@ -857,20 +860,20 @@ function About() {
 
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-[#745893] md:group-hover:text-[#745893] transition-colors duration-300 text-xl md:text-2xl uppercase font-bold">
-                                    03 / Care
+                                    {t.aboutPage.values.cards[2].title}
                                 </h3>
                                 <div className="text-[#745893]/80 md:text-[#745893]/80 text-base md:text-lg leading-relaxed font-regular">
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Care For Us (Employee and Terms)
+                                        {t.aboutPage.values.cards[2].points[0]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Care For Community
+                                        {t.aboutPage.values.cards[2].points[1]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Care For The Planet
+                                        {t.aboutPage.values.cards[2].points[2]}
                                     </p>
                                 </div>
                             </div>
@@ -889,20 +892,20 @@ function About() {
 
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-[#745893] text-xl md:text-2xl uppercase font-bold">
-                                    01 / Integrity
+                                    {t.aboutPage.values.cards[0].title}
                                 </h3>
                                 <div className="text-[#745893]/80 text-base md:text-lg leading-relaxed font-regular">
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Do The Right Thing
+                                        {t.aboutPage.values.cards[0].points[0]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Walk The Talk
+                                        {t.aboutPage.values.cards[0].points[1]}
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 bg-[#FFF200] rounded-full"></span>
-                                        Foster Sound Decisions
+                                        {t.aboutPage.values.cards[0].points[2]}
                                     </p>
                                 </div>
                             </div>
@@ -935,12 +938,12 @@ function About() {
                         <div className="flex items-center gap-4 mb-2 animate-fade-in">
                             <div className="h-[1px] bg-[#745893]/30 w-12 md:w-20" />
                             <span className="text-[#745893] font-medium tracking-[0.3em] text-[10px] md:text-xs uppercase">
-                                Professional Team
+                                {t.aboutPage.experts.subtitle}
                             </span>
                             <div className="h-[1px] bg-[#745893]/30 w-12 md:w-20" />
                         </div>
                         <h2 className="text-[#745893] text-4xl sm:text-5xl md:text-6xl font-bold uppercase text-center leading-none">
-                            Our Experts
+                            {t.aboutPage.experts.title}
                         </h2>
                     </div>
 
@@ -970,7 +973,7 @@ function About() {
                                     <div className="flex items-center gap-2 justify-center">
                                         <div className="w-3 md:w-4 h-[1px] bg-[#FFF200]" />
                                         <span className="text-[#745893]/60 text-xs md:text-sm font-bold uppercase tracking-widest">
-                                            Physiotherapy Director
+                                            {head.title}
                                         </span>
                                     </div>
                                 </div>
@@ -1029,12 +1032,13 @@ function About() {
 
                 {/* Content */}
                 <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-                    <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
-                        Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
-                    </h2>
+                    <h2 
+                        className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12"
+                        dangerouslySetInnerHTML={{ __html: t.aboutPage.cta.title }}
+                    />
 
                     <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
-                        Book An Appointment
+                        {t.aboutPage.cta.button}
                         <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                             <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>

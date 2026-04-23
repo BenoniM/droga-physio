@@ -527,13 +527,13 @@ function Home() {
 
       {/* About Us Panel (Fixed alongside background image) */}
       <div
-        className="fixed px-6 md:px-24 h-auto md:h-[60vh] top-[15vh] md:top-[20vh] w-full md:w-1/2 flex flex-col justify-center gap-4 md:gap-5 z-0 transition-opacity"
+        className="fixed px-6 md:px-24 h-auto md:h-[60vh] top-[25vh] md:top-[20vh] w-full md:w-1/2 flex flex-col justify-center gap-4 md:gap-5 z-0 transition-opacity"
         style={{
           left: redLeft,
           transition: 'left 1s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
-        <div className="flex flex-col justify-center gap-3 md:gap-5 bg-white/45 md:bg-transparent backdrop-blur-md md:backdrop-blur-none p-5 sm:p-6 md:p-0 rounded-xl md:rounded-none md:shadow-none border border-white/45 md:border-transparent mt-[8vh] md:mt-0 max-w-full md:max-w-none">
+        <div className="flex flex-col justify-center gap-3 md:gap-5 bg-white/45 md:bg-transparent backdrop-blur-md md:backdrop-blur-none p-5 sm:p-6 md:p-0 rounded-xl md:rounded-none md:shadow-none border border-white/45 md:border-transparent mt-[10vh] md:mt-0 max-w-full md:max-w-none">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="flex items-center">
               <div className="h-[2px] bg-[#745893] w-50 md:w-50"></div>
@@ -652,11 +652,42 @@ function Home() {
 
             {/* Bottom footer bar — shared */}
             <div className="w-full mt-auto z-20 px-6 md:px-0">
-              {/* Progress line */}
-              <div className="w-full h-[2px] bg-white/30 mb-4 relative">
+              {/* Progress line with dragger */}
+              <div className="w-full h-[2px] bg-white/30 mb-8 md:mb-4 relative flex items-center group">
+                {/* Filled bar */}
                 <div
-                  className="absolute top-0 left-0 h-full w-full bg-[#F7F7F5] origin-left transition-transform duration-150 ease-out"
+                  className="absolute top-0 left-0 h-full w-full bg-[#F7F7F5] origin-left pointer-events-none"
                   style={{ transform: `scaleX(${Math.max(0.02, serviceProgress)})` }}
+                />
+                
+                {/* Thumb indicator (the "scroll thingie") */}
+                <div 
+                  className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-[#FFF200] rounded-full shadow-[0_0_10px_rgba(255,242,0,0.5)] pointer-events-none z-10"
+                  style={{ left: `calc(${Math.max(0.02, serviceProgress) * 100}% - 8px)` }}
+                />
+                
+                {/* Invisible interactive range input */}
+                <input 
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.0001"
+                  value={serviceTargetProgress.current}
+                  onChange={(e) => {
+                    const newProgress = parseFloat(e.target.value);
+                    if (servicesRef.current) {
+                      const rect = servicesRef.current.getBoundingClientRect();
+                      const scrollDistance = rect.height - window.innerHeight;
+                      const elementTop = window.scrollY + rect.top;
+                      const targetY = elementTop + (newProgress * scrollDistance);
+                      
+                      // Immediately update the target ref to avoid frame lag
+                      serviceTargetProgress.current = newProgress;
+                      window.scrollTo({ top: targetY, behavior: 'instant' });
+                    }
+                  }}
+                  className="absolute inset-0 w-full opacity-0 cursor-grab active:cursor-grabbing m-0 z-20 touch-none"
+                  style={{ height: '40px', top: '50%', transform: 'translateY(-50%)' }}
                 />
               </div>
               <div className="flex justify-between items-center">

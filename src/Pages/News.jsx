@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -12,6 +13,11 @@ import img5 from '../assets/news/01K87Z55XY4P3JZJD9ZS34C9ZX2.png'
 import img6 from '../assets/news/01K8AJ4CXG6T09EWPPD69R0TB51.png'
 import img7 from '../assets/news/01K8AJ4CXG6T09EWPPD69R0TB52.jpg'
 import CtaBgImg from '../assets/about/cta_background.png'
+
+// ── Data mapping for images ──────────────────────────────────────────────────
+const articleImages = {
+  1: img1, 2: img2, 3: img3, 4: img4, 5: img5, 6: img6, 7: img7
+};
 
 // ── Data ────────────────────────────────────────────────────────────────────
 const ALL_ARTICLES = [
@@ -119,6 +125,7 @@ function useReveal(threshold = 0.15) {
 
 // ── Article Card ─────────────────────────────────────────────────────────────
 function ArticleCard({ article, index, onClick }) {
+  const { t } = useLanguage()
   const [ref, visible] = useReveal(0.1)
   const delay = `${(index % 3) * 100}ms`
 
@@ -159,7 +166,7 @@ function ArticleCard({ article, index, onClick }) {
 
         {/* Read more link */}
         <div className="mt-2 flex items-center gap-2 text-[#745893] font-semibold text-sm group-hover:text-[#745893] transition-colors">
-          <span>Read More</span>
+          <span>{t.newsPage.article.readMore}</span>
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none"
             className="transition-transform group-hover:translate-x-1">
             <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
@@ -184,6 +191,8 @@ const TICKER_ITEMS = [
 ]
 
 function Ticker() {
+  const { t } = useLanguage();
+  const TICKER_ITEMS = t.newsPage.ticker;
   return (
     <div className="w-full bg-[#FFF200] overflow-hidden py-3 select-none">
       <div
@@ -205,7 +214,14 @@ function Ticker() {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function News() {
+  const { t } = useLanguage();
   const [selectedArticle, setSelectedArticle] = useState(null)
+  
+  const ALL_ARTICLES = t.newsPage.articles.map(article => ({
+    ...article,
+    img: articleImages[article.id],
+    featured: article.id === 1
+  }));
   
   useEffect(() => {
     if (selectedArticle) {
@@ -214,7 +230,12 @@ export default function News() {
   }, [selectedArticle]);
 
   const [scrollY, setScrollY] = useState(0)
-  const [activeCategory, setActiveCategory] = useState('All')
+  const [activeCategory, setActiveCategory] = useState(t.newsPage.categories.all)
+
+  // Reset category filter when language changes to prevent empty results
+  useEffect(() => {
+    setActiveCategory(t.newsPage.categories.all)
+  }, [t.newsPage.categories.all])
   const [searchQuery, setSearchQuery] = useState('')
   const [hoveredCard, setHoveredCard] = useState(null)
 
@@ -319,7 +340,7 @@ export default function News() {
   // Articles filtering
   const featured = ALL_ARTICLES.find((a) => a.featured) || ALL_ARTICLES[0]
   const filtered = ALL_ARTICLES.filter((a) => {
-    const matchCat = activeCategory === 'All' || a.category === activeCategory
+    const matchCat = activeCategory === t.newsPage.categories.all || a.category === activeCategory
     const matchSearch =
       searchQuery === '' ||
       a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -348,7 +369,7 @@ export default function News() {
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:-translate-x-1 rotate-180">
                <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            Back to News
+            {t.newsPage.article.backToNews}
           </button>
         </div>
 
@@ -382,31 +403,25 @@ export default function News() {
           <div className="prose prose-lg text-[#333]/80 leading-relaxed max-w-none">
             <p className="mb-6 text-xl leading-relaxed text-[#333]/90">{selectedArticle.content}</p>
             
-            <h3 className="text-[#745893] text-2xl mb-4 mt-8">Understanding the Condition</h3>
-            <p className="mb-6">
-              When dealing with this condition, it is critical to understand the underlying mechanics that lead to discomfort. Our evidence-based approach ensures that we not only address the symptoms but also the root cause. This involves a comprehensive assessment of your movement patterns, strength, and flexibility. 
-            </p>
+            <h3 className="text-[#745893] text-2xl mb-4 mt-8">{t.newsPage.article.understanding}</h3>
+            <p className="mb-6">{t.newsPage.article.understandingDesc}</p>
             
             <div className="bg-[#745893]/5 p-8 rounded-sm border-l-4 border-[#745893] mb-8 mt-8">
               <p className="text-xl font-medium text-[#745893] italic">
-                "Healing is a matter of time, but it is sometimes also a matter of opportunity. Our physiotherapy approach focuses on unlocking your body's natural healing potential."
+                "{t.newsPage.article.healingQuote}"
               </p>
             </div>
             
-            <h3 className="text-[#745893] text-2xl mb-4 mt-8">Our Treatment Approach</h3>
-            <p className="mb-6">
-              Treatment plans are highly individualized. We may utilize a combination of manual therapy, targeted therapeutic exercises, dry needling, and modalities such as ultrasound or electrical stimulation. The goal is always to restore function, improve mobility, and enhance your overall quality of life.
-            </p>
+            <h3 className="text-[#745893] text-2xl mb-4 mt-8">{t.newsPage.article.treatment}</h3>
+            <p className="mb-6">{t.newsPage.article.treatmentDesc}</p>
             
-            <p className="mb-6">
-              Consistency is key. While in-clinic sessions are essential, we also emphasize the importance of home exercise programs. By actively participating in your recovery process outside the clinic, you significantly improve your long-term outcomes and reduce the risk of recurrence.
-            </p>
+            <p className="mb-6">{t.newsPage.article.consistencyDesc}</p>
           </div>
           
           {/* Share or CTA within article */}
           <div className="mt-16 pt-8 border-t border-[#745893]/20 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <span className="text-[#745893] font-medium tracking-widest text-sm uppercase">Share:</span>
+              <span className="text-[#745893] font-medium tracking-widest text-sm uppercase">{t.newsPage.article.share}</span>
               <div className="flex gap-3">
                 <button className="w-10 h-10 rounded-full bg-[#745893]/10 flex items-center justify-center text-[#745893] hover:bg-[#745893] hover:text-white transition-colors">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
@@ -414,7 +429,7 @@ export default function News() {
               </div>
             </div>
             <Link to="/appointment" className="bg-[#FFF200] text-[#745893] px-8 py-3 rounded-full font-medium text-sm transition-all hover:scale-105 shadow-md flex items-center gap-2 group">
-              Book a Consultation
+              {t.newsPage.article.bookConsultation}
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                  <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -501,17 +516,16 @@ export default function News() {
           <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
             <div className="h-[1px] bg-[#FFF200]/60 w-20" />
             <span className="text-[#FFF200] font-medium tracking-[0.3em] text-sm uppercase">
-              Droga Physiotherapy
+              {t.newsPage.hero.subtitle}
             </span>
             <div className="h-[1px] bg-[#FFF200]/60 w-20" />
           </div>
 
           <h1
-            className="md:font-['Compacta'] text-[#F7F7F5] text-[clamp(2rem,8vw,5rem)] md:text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
+            className="md:font-compacta text-[#F7F7F5] text-[clamp(2rem,8vw,5rem)] md:text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-          >
-            News And<br />Insights
-          </h1>
+            dangerouslySetInnerHTML={{ __html: t.newsPage.hero.title }}
+          />
 
           
 
@@ -541,17 +555,16 @@ export default function News() {
             <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
             <span className="text-[#F7F7F5] font-medium tracking-[0.3em] text-sm uppercase">
-              Droga Physiotherapy
+              {t.newsPage.hero.subtitle}
             </span>
             <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
           </div>
 
           <h1
-            className="md:font-['Compacta'] text-[#FFF200] text-[clamp(2rem,8vw,5rem)] md:text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
+            className="md:font-compacta text-[#FFF200] text-[clamp(2rem,8vw,5rem)] md:text-[clamp(3.5rem,8vw,7rem)] leading-[0.9] uppercase animate-fade-up"
             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-          >
-            News And<br />Insights
-          </h1>
+            dangerouslySetInnerHTML={{ __html: t.newsPage.hero.title }}
+          />
           </div>
         </div>
       </section>
@@ -576,7 +589,7 @@ export default function News() {
             <div className="h-[1.25px] bg-[#745893] w-60" />
             <div className="w-2 h-2 bg-[#745893] rotate-45 -mr-1" />
           </div>
-          <span className="text-[#745893] font-medium tracking-widest text-sm uppercase">Featured Story</span>
+          <span className="text-[#745893] font-medium tracking-widest text-sm uppercase">{t.newsPage.featured.subtitle}</span>
         </div>
 
         {/* Featured card */}
@@ -619,7 +632,7 @@ export default function News() {
               </p>
 
               <button onClick={(e) => { e.stopPropagation(); setSelectedArticle(featured); }} className="flex items-center w-max gap-3 bg-[#FFF200] text-[#745893] px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-white transition-all duration-300 hover:scale-105 shadow-lg group/btn">
-                Read Full Article
+                {t.newsPage.featured.button}
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   className="transition-transform group-hover/btn:translate-x-1">
                   <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699"
@@ -648,12 +661,12 @@ export default function News() {
               <div className="w-2 h-2 bg-[#745893] rotate-45 -mr-1" />
             </div>
             <span className="text-[#745893] font-medium tracking-widest text-sm uppercase">
-              {activeCategory === 'All' ? 'All Articles' : activeCategory}
+              {activeCategory === t.newsPage.categories.all ? t.newsPage.article.allArticles : activeCategory}
             </span>
           </div>
 
           <span className="text-[#745893]/50 text-sm">
-            {filtered.length} article{filtered.length !== 1 ? 's' : ''}
+            {filtered.length} {filtered.length !== 1 ? t.newsPage.article.countPlural : t.newsPage.article.count}
           </span>
         </div>
 
@@ -666,13 +679,13 @@ export default function News() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="text-[#745893]/20 text-8xl mb-4">?</div>
-            <p className="text-[#745893]/60 text-lg">No articles found for this search.</p>
+            <div className="text-[#745893]/20 text-8xl mb-4">{t.newsPage.noResults.title}</div>
+            <p className="text-[#745893]/60 text-lg">{t.newsPage.noResults.desc}</p>
             <button
-              onClick={() => { setActiveCategory('All'); setSearchQuery('') }}
+              onClick={() => { setActiveCategory(t.newsPage.categories.all); setSearchQuery('') }}
               className="mt-6 px-6 py-2 rounded-full bg-[#745893] text-white text-sm hover:bg-[#5d3e78] transition"
             >
-              Clear Filters
+              {t.newsPage.noResults.clear}
             </button>
           </div>
         )}
@@ -688,6 +701,7 @@ export default function News() {
 
 // ── Newsletter CTA section ───────────────────────────────────────────────────
 function NewsletterSection() {
+  const { t } = useLanguage()
   const [ref, visible] = useReveal(0.15)
   return (
     <section className="relative w-full h-[40vh] md:h-[50vh] min-h-[350px] md:min-h-[400px] overflow-hidden">
@@ -703,12 +717,13 @@ function NewsletterSection() {
 
         {/* Content */}
         <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-            <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
-                Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
-            </h2>
+            <h2 
+                className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12"
+                dangerouslySetInnerHTML={{ __html: t.newsPage.cta.title }}
+            />
 
             <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
-                Book An Appointment
+                {t.newsPage.cta.button}
                 <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                     <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

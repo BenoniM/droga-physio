@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CtaBgImg from '../assets/about/cta_background.png'
@@ -54,7 +55,7 @@ function SectionHeading({ title, subtitle }) {
         <div className="h-[1px] bg-[#745893]/40 w-16" />
       </div>
       <h2 
-        className="md:font-['Compacta'] text-[#745893] text-[clamp(2rem,6vw,3rem)] leading-[0.9] uppercase"
+        className="md:font-compacta text-[#745893] text-[clamp(2rem,6vw,3rem)] leading-[0.9] uppercase"
         style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)', transition: 'all 0.8s ease 0.1s' }}
       >
         {title}
@@ -120,35 +121,23 @@ function TimelineItem({ time, title, description, alignLeft }) {
 
 // ── Toolbox Accordion ────────────────────────────────────────────────────────
 function ToolboxAccordion() {
+  const { t } = useLanguage()
   const [ref, visible] = useReveal(0.1)
   const [activeIndex, setActiveIndex] = useState(0)
   
-  const tools = [
-    {
-      title: "Ice vs. Heat",
-      desc: "Ice limits blood flow to reduce acute swelling. Heat promotes blood flow to relax muscles. Never use heat on a fresh injury.",
-      img: "https://images.pexels.com/photos/3334510/pexels-photo-3334510.jpeg"
-    },
-    {
-      title: "Foam Rolling",
-      desc: "Release myofascial tightness in IT bands, calves, and upper back using slow, controlled pressure before and after workouts.",
-      img: "https://images.pexels.com/photos/4804307/pexels-photo-4804307.jpeg"
-    },
-    {
-      title: "Epsom Salt Baths",
-      desc: "Magnesium sulfate absorbed through the skin helps relax overworked muscles and loosen stiff joints after long days.",
-      img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop"
-    },
-    {
-      title: "Active Recovery",
-      desc: "Instead of total rest, try light walking, cycling, or swimming to promote nutrient-rich blood flow to recovering tissues.",
-      img: "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?q=80&w=800&auto=format&fit=crop"
-    }
-  ]
+  const tools = t.blogPage.toolbox.items.map((item, idx) => ({
+    ...item,
+    img: [
+      "https://images.pexels.com/photos/3334510/pexels-photo-3334510.jpeg",
+      "https://images.pexels.com/photos/4804307/pexels-photo-4804307.jpeg",
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?q=80&w=800&auto=format&fit=crop"
+    ][idx]
+  }))
 
   return (
     <section className="py-24 px-6 md:px-20 max-w-[1400px] mx-auto overflow-hidden">
-        <SectionHeading title="At-Home Recovery Toolbox" subtitle="Practical Methods" />
+        <SectionHeading title={t.blogPage.toolbox.title} subtitle={t.blogPage.toolbox.subtitle} />
         
         <div 
             ref={ref}
@@ -193,6 +182,7 @@ function ToolboxAccordion() {
 
 // ── Main Layout ──────────────────────────────────────────────────────────────
 export default function Blog() {
+  const { t } = useLanguage()
   const [scrollY, setScrollY] = useState(0)
 
   // Hero comet state
@@ -284,7 +274,7 @@ export default function Blog() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] overflow-x-hidden font-['Delight']">
+    <div className="min-h-screen bg-[#F7F7F5] overflow-x-hidden">
       <div className="fixed top-0 left-0 w-full z-200">
         <Navbar scrollY={scrollY} />
       </div>
@@ -320,16 +310,15 @@ export default function Blog() {
           <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
             <div className="h-[1px] bg-[#FFF200]/60 w-20" />
             <span className="text-[#FFF200] font-medium tracking-[0.3em] text-sm uppercase">
-              Droga Physiotherapy
+              {t.blogPage.hero.subtitle}
             </span>
             <div className="h-[1px] bg-[#FFF200]/60 w-20" />
           </div>
           <h1
-            className="max-w-6xl md:font-['Compacta'] text-[#F7F7F5] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
+            className="max-w-6xl md:font-compacta text-[#F7F7F5] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
             style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-          >
-            Wellness And Pre-Therapy<br />Tips For Daily Life
-          </h1>
+            dangerouslySetInnerHTML={{ __html: t.blogPage.hero.title }}
+          />
         </div>
 
         {/* Top reveal layer — image on hover */}
@@ -354,30 +343,29 @@ export default function Blog() {
             <div className="flex items-center gap-4 mb-6 animate-slide-down" style={{ animationDelay: '0.1s' }}>
               <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
               <span className="text-[#F7F7F5] font-medium tracking-[0.3em] text-sm uppercase">
-                Droga Physiotherapy
+                {t.blogPage.hero.subtitle}
               </span>
               <div className="h-[1px] bg-[#F7F7F5]/60 w-20" />
             </div>
             <h1
-              className="max-w-6xl md:font-['Compacta'] text-[#FFF200] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
+              className="max-w-6xl md:font-compacta text-[#FFF200] text-[clamp(1.8rem,5.5vw,3rem)] md:text-[clamp(3.5rem,8vw,6.5rem)] leading-[0.9] uppercase animate-fade-up"
               style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}
-            >
-              Wellness And Pre-Therapy<br />Tips For Daily Life
-            </h1>
+              dangerouslySetInnerHTML={{ __html: t.blogPage.hero.title }}
+            />
           </div>
         </div>
       </section>
 
       {/* ── BENTO GRID SECTION (LIFESTYLE TIPS) ───────────────────────────── */}
       <section className="py-24 px-6 md:px-20 max-w-[1400px] mx-auto">
-        <SectionHeading title="Preventative Care Guides" subtitle="Ergonomics & Lifestyle" />
+        <SectionHeading title={t.blogPage.bentoSection.title} subtitle={t.blogPage.bentoSection.subtitle} />
         
         <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-[auto,auto,auto] md:grid-rows-[400px_300px] gap-4 md:gap-6 mt-12 w-full">
             {/* LARGE SQUARE - Desk Ergonomics */}
             <BentoCard 
                 imgSrc={IMAGES.sit}
-                title="Master Your Desk Posture"
-                content="Sitting for hours puts immense pressure on your spine. Keep your screen at eye level, shoulders relaxed, and lower back supported. Ensure your feet are flat on the floor to maintain blood circulation and reduce lumbar strain."
+                title={t.blogPage.bentoSection.cards.desk.title}
+                content={t.blogPage.bentoSection.cards.desk.content}
                 colSpan="col-span-1 md:col-span-2"
                 rowSpan="row-span-1 md:row-span-2"
                 delay={0}
@@ -386,8 +374,8 @@ export default function Blog() {
             {/* TALL RECTANGLE - Driving */}
             <BentoCard 
                 imgSrc={IMAGES.drive}
-                title="Drive Pain-Free"
-                content="Adjust your seat so your knees are slightly bent. Keep your hands at 9 and 3 o'clock. Use a lumbar roll if your seat lacks support."
+                title={t.blogPage.bentoSection.cards.drive.title}
+                content={t.blogPage.bentoSection.cards.drive.content}
                 colSpan="col-span-1 md:col-span-1"
                 rowSpan="row-span-1 md:row-span-2"
                 delay={0.15}
@@ -396,8 +384,8 @@ export default function Blog() {
             {/* SMALL SQUARE 1 - Stretching */}
             <BentoCard 
                 imgSrc={IMAGES.stretch}
-                title="3-Minute Stretch"
-                content="Incorporate quick standing back extensions and neck gentle rolls every two hours."
+                title={t.blogPage.bentoSection.cards.stretch.title}
+                content={t.blogPage.bentoSection.cards.stretch.content}
                 colSpan="col-span-1 md:col-span-1"
                 rowSpan="h-[300px] md:h-auto row-span-1 md:row-span-1"
                 delay={0.3}
@@ -406,8 +394,8 @@ export default function Blog() {
             {/* SMALL SQUARE 2 - Eye Strain */}
             <BentoCard 
                 imgSrc={IMAGES.eyes}
-                title="The 20-20-20 Rule"
-                content="Every 20 mins, look 20 feet away for 20 seconds. This prevents neck craning caused by focusing strictly on screens."
+                title={t.blogPage.bentoSection.cards.eyes.title}
+                content={t.blogPage.bentoSection.cards.eyes.content}
                 colSpan="col-span-1 md:col-span-1"
                 rowSpan="h-[300px] md:h-auto row-span-1 md:row-span-1"
                 delay={0.45}
@@ -421,36 +409,21 @@ export default function Blog() {
       {/* ── TIMELINE SECTION: DAY IN THE LIFE ───────────────────────────────── */}
       <section className="py-24 bg-[#EBEBE8] relative">
         <div className="max-w-5xl mx-auto px-6">
-            <SectionHeading title="A Healthy Daily Routine" subtitle="Chronological Guide" />
+            <SectionHeading title={t.blogPage.timeline.title} subtitle={t.blogPage.timeline.subtitle} />
 
             <div className="relative mt-20">
                 {/* Central Line for desktop */}
                 <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-[#745893]/20 -translate-x-1/2" />
                 
-                <TimelineItem 
-                    time="07:00 AM" 
-                    title="The Wake-Up Stretch" 
-                    description="Before leaping out of bed, gently bring your knees to your chest to stretch the lower back. Roll to your side before sitting up to avoid spinal compression right in the morning." 
-                    alignLeft={false} 
-                />
-                <TimelineItem 
-                    time="11:30 AM" 
-                    title="The Desk Reset" 
-                    description="If you're desk-bound, stand up and walk around. Perform shoulder blade squeezes and chin tucks to counteract the modern 'forward-head' tech posture." 
-                    alignLeft={true} 
-                />
-                <TimelineItem 
-                    time="15:00 PM" 
-                    title="Hydration & Alignment" 
-                    description="Dehydrated spinal discs lose their cushioning capability. Drink water throughout the afternoon, and check your ergonomic chair settings." 
-                    alignLeft={false} 
-                />
-                <TimelineItem 
-                    time="22:00 PM" 
-                    title="Optimal Sleeping Positions" 
-                    description="Sleep on your back with a pillow under your knees, or on your side with a pillow between your legs. Avoid sleeping on your stomach, which twists the cervical spine." 
-                    alignLeft={true} 
-                />
+                {t.blogPage.timeline.items.map((item, idx) => (
+                    <TimelineItem 
+                        key={idx}
+                        time={item.time} 
+                        title={item.title} 
+                        description={item.desc} 
+                        alignLeft={idx % 2 !== 0} 
+                    />
+                ))}
             </div>
         </div>
       </section>
@@ -465,6 +438,7 @@ export default function Blog() {
 
 // ── Shared Components ────────────────────────────────────────────────────────
 function NewsletterSection() {
+  const { t } = useLanguage()
   const [ref, visible] = useReveal(0.15)
   return (
     <section className="relative w-full h-[40vh] md:h-[50vh] min-h-[350px] md:min-h-[400px] overflow-hidden">
@@ -480,12 +454,13 @@ function NewsletterSection() {
 
         {/* Content */}
         <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
-            <h2 className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12">
-                Start Your Journey to <br className="hidden sm:block" /> Pain-Free Mobility Today!
-            </h2>
+            <h2 
+                className="text-white text-3xl sm:text-4xl md:text-[clamp(2.5rem,8vw,3.5rem)] leading-[1.2] uppercase max-w-5xl mb-8 md:mb-12"
+                dangerouslySetInnerHTML={{ __html: t.newsPage.cta.title }}
+            />
 
             <Link to="/appointment" className="bg-white text-[#745893] px-8 md:px-10 py-4 md:py-5 rounded-full flex items-center gap-3 font-medium text-sm transition-all hover:scale-105 hover:bg-[#F7F7F5] shadow-xl group">
-                Book An Appointment
+                {t.newsPage.cta.button}
                 <svg width="25" height="25" viewBox="0 0 20 20" fill="none" className="transition-transform group-hover:translate-x-1">
                     <path d="M16.667 10L11.667 15M16.667 10L11.667 5M16.667 10H7.91699M3.33366 10H5.41699" stroke="#745893" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
